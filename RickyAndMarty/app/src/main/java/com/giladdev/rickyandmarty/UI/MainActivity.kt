@@ -23,7 +23,12 @@ import retrofit2.Retrofit
 
 class MainActivity : AppCompatActivity() {
 
-    private var characterslist : ArrayList<Character>?=null
+    //you can set all of them as `lateinit var`, by that way you don't need to handle as nullable
+    //You code will be more clean and straight forward
+    //lateinit means is gonna have a value but later and before the first usage
+    private lateinit var characterslist : ArrayList<Character>
+    
+    
     private var myCompositeDisposable: CompositeDisposable? = null
     private var adapter : CharacterListAdaptor?=null
     private var layoutManager : RecyclerView.LayoutManager?=null
@@ -34,11 +39,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         characterslist = ArrayList<Character>()
-        adapter = CharacterListAdaptor(characterslist!!,this)
+        adapter = CharacterListAdaptor(characterslist,this)
         layoutManager = LinearLayoutManager(this)
         myCompositeDisposable = CompositeDisposable()
 
         // set up the list , recycler view
+        
+        //Call the UI elements with small case only
         RecyclerView.layoutManager = layoutManager
         RecyclerView.adapter = adapter
 
@@ -68,14 +75,22 @@ class MainActivity : AppCompatActivity() {
                 call: Call<CharacterList>,
                 response: Response<CharacterList>
             ) {
+                //this one shouldn't be a nullable - in case `response.body()` is, you should use
+                // response.body()?.let { ... You code here ...}
+                
                 var Charecters : CharacterList? = response.body()
 
+                //Use functional programming instead: Charecters.characterList.forEach { element -> your code here}
                 for (x in Charecters!!.characterList!!.toTypedArray())
                 {
+                    //val newCharacter = Character(x.name,x.gender,x.image)
+                    //You don't need to declare the type, you can infer it - let the compiler work for you
                     var newCharacter : Character? = Character(x.name,x.gender,x.image)
+                    //how newCharacter becomes null ? Isn't possible, don't declare it as nullable
                     if (newCharacter != null) {
-                        characterslist!!.add(newCharacter)
+                        characterslist.add(newCharacter)
                     }
+                    //Once adapter will be lateinit var, thr `!!` won't be necesary
                 adapter!!.notifyDataSetChanged()
                 }
             }
@@ -112,6 +127,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        
+        //The super method is always called at the end after you released your variables
+        //otherwise you are in risk on being collected by the garbage collector and leaking your variables
+        //In the onCreate, by the other hand, the super method is called by the beginning before anything else
+        
         super.onDestroy()
 
 //Clear all your disposables//
