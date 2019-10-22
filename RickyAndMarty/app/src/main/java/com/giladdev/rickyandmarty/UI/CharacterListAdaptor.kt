@@ -65,21 +65,7 @@ class CharacterListAdaptor(private val list:ArrayList<Character>,private val con
             image.loadImage(character.image,progressDrawable )
             image.visibility = View.VISIBLE
 /*
-            try {
 
-                // download the image
-                var imageDownloader: DownLoadImageTask =
-                    DownLoadImageTask(
-                        image,
-                        character.image.toString()
-                    )
-
-                imageDownloader.execute()
-            }
-            catch (e: Exception) { // Catch the download exception
-                Log.d("Exception DownLoadImageTask ",e.message)
-
-            }
 */
             itemView.setOnClickListener {
                 Toast.makeText(it.context, name.text,Toast.LENGTH_LONG ).show()

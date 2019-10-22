@@ -25,13 +25,13 @@ class MainActivity : AppCompatActivity() {
         viewModel.refresh()
 
         // apply - Scope Functions
-        RecyclerView.apply {
+        listRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = charAdapter
         }
 
         errorTextView.visibility = View.GONE
-        RecyclerView.visibility = View.GONE
+        listRecyclerView.visibility = View.GONE
 
         observeViewModel()
     }
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     fun observeViewModel() {
 
         charAdapter.lastLine.observe(this, Observer {isLastLine : Boolean->
-            isLastLine.let{
+            isLastLine .let{
                 if (it == true) {
                     viewModel.refresh()
                     charAdapter.lastLine.value = false
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         })
         viewModel.characters.observe(this, androidx.lifecycle.Observer { characters: CharacterList? ->
             characters?.let {
-                RecyclerView.visibility = View.VISIBLE
+                listRecyclerView.visibility = View.VISIBLE
                 charAdapter.UpdateCharacters(it)}
         })
 
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
                 if (it)
                 {
-                    RecyclerView.visibility = View.GONE
+                    listRecyclerView.visibility = View.GONE
                 }
             }
         })
