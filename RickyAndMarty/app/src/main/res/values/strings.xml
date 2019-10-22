@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">Ricky And Marty</string>
+    <string name="app_name">Rick And Morty</string>
     <string name="nametext">name</string>
     <string name="gendertext">Gender</string>
     <string name="imagedescription">imagedescription</string>
+    <string name="errorTextView">THIS IS AN ERROR</string>
 </resources>
