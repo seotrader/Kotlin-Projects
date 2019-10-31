@@ -1,31 +1,46 @@
 package com.giladdev.choreapp.ui
 
 import android.content.Context
-import android.content.Intent
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.giladdev.choreapp.R
-import com.giladdev.choreapp.model.Chore
-import com.giladdev.choreapp.model.ChoresDataBaseHandler
+import com.giladdev.choreapp.Util.GetTimeAsString
+import com.giladdev.choreapp.model.ChoresEntity
 import kotlinx.android.synthetic.main.popup.view.*
 
-class ChoreListAdapter(private val list:ArrayList<Chore>,
-                       private val context: Context) : RecyclerView.Adapter<ChoreListAdapter.ViewHolder>() {
+class ChoreListAdapter(private val list:ArrayList<ChoresEntity>,
+                       private val context: ChoreListActivity) : RecyclerView.Adapter<ChoreListAdapter.ViewHolder>() {
 
+    var viewHolder : ViewHolder ?=null
+
+    fun UpdateChores(newCharacters: List<ChoresEntity>)
+    {
+        list.clear()
+        list.addAll(newCharacters.toTypedArray())
+        list.reverse()
+        notifyDataSetChanged()
+    }
+
+    fun ReverseList()
+    {
+        list.reverse()
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChoreListAdapter.ViewHolder {
         // create our view from the XML file
         val view = LayoutInflater.from(context)
                  .inflate(R.layout.list_row,parent,false)
 
-        return ViewHolder(view,context,list)
+        viewHolder = ViewHolder(view,context,list)
+
+        return viewHolder as ViewHolder
     }
 
     override fun getItemCount(): Int {
@@ -37,7 +52,7 @@ class ChoreListAdapter(private val list:ArrayList<Chore>,
 
     }
 
-    inner class ViewHolder(itemView: View,context:Context, list : ArrayList<Chore>) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class ViewHolder(itemView: View,context:Context, list : ArrayList<ChoresEntity>) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         var mList = list
         var choreName = itemView.findViewById(R.id.listChoreNameTextView) as TextView
@@ -51,11 +66,11 @@ class ChoreListAdapter(private val list:ArrayList<Chore>,
         var editButton = itemView.findViewById(R.id.listEditButton) as Button
 
 
-        fun bindViews(chore: Chore) {
+        fun bindViews(chore: ChoresEntity) {
             choreName.text = chore.choreName
             assignedBy.text = chore.assignedBy
             assignedTo.text = chore.assignedTo
-            assignedDate.text = chore.GetTimeAsString()
+            assignedDate.text = GetTimeAsString(chore.timerAssigned)
 
             deleteButton.setOnClickListener(this)
             editButton.setOnClickListener(this)
@@ -63,37 +78,65 @@ class ChoreListAdapter(private val list:ArrayList<Chore>,
 
         }
 
+        fun ConfirmDelete(chore : ChoresEntity, adapterPosition : Int)
+        {
+            // Initialize a new instance of
+            val builder = AlertDialog.Builder(context)
+            // Set the alert dialog title
+            builder.setTitle("DELETE A CHORE")
+
+            // Display a message on alert dialog
+            builder.setMessage("Are You Sure You Want To Delete This Chore?")
+
+            // Set a positive button and its click listener on alert dialog
+            builder.setPositiveButton("YES"){ dialog, _ ->
+
+                context.choresViewModel.DeleteChore(chore)
+                mList.removeAt(adapterPosition)
+                notifyItemRemoved(adapterPosition)
+                dialog.dismiss()
+            }
+
+            // Display a negative button on alert dialog
+            builder.setNegativeButton("No"){ dialog, _ ->
+                dialog.dismiss()
+            }
+
+            // Finally, make the alert dialog using builder
+            val dialog: AlertDialog = builder.create()
+
+            dialog.setIcon(R.drawable.warning)
+            // Display the alert dialog on app interface
+            dialog.show()
+
+        }
+
         override fun onClick(v: View?) {
 
             var mPosition: Int = adapterPosition
-            var clone = mList[mPosition]
+
 
             when (v!!.id) {
                 deleteButton.id -> {
-                    deleteChore(clone.id!!)
-                    mList.removeAt(adapterPosition)
-                    notifyItemRemoved(adapterPosition)
+                        if (mPosition != -1) {
+                            var clone = mList[mPosition]
+                            ConfirmDelete(clone,adapterPosition)
+                        }
                 }
                 editButton.id -> {
+                    var clone = mList[mPosition]
                     editChore(clone)
                 }
             }
         }
 
-        fun deleteChore(id: Int) {
-            var db: ChoresDataBaseHandler = ChoresDataBaseHandler(mContext)
-
-            db.deleteChore(id)
-        }
-
-        fun editChore(chore: Chore) {
+        fun editChore(chore: ChoresEntity) {
 
             lateinit var dialogBuilder: AlertDialog.Builder
             lateinit var dialog: AlertDialog
-            var dbHandler = ChoresDataBaseHandler(context)
-            var mPosition: Int = adapterPosition
 
             var view = LayoutInflater.from(context).inflate(R.layout.popup,null)
+            var updatedChore = ChoresEntity(chore.id, chore.choreName,chore.assignedBy,chore.assignedTo,chore.timerAssigned)
 
             var choreName = view.popEnterChoreText
             var assignedBy = view.popEnterAssignedBy
@@ -102,6 +145,11 @@ class ChoreListAdapter(private val list:ArrayList<Chore>,
 
             dialogBuilder = AlertDialog.Builder(context).setView(view)
             dialog = dialogBuilder.create()
+
+            choreName.setText(updatedChore.choreName)
+            assignedBy.setText(updatedChore.assignedBy)
+            assignedTo.setText(updatedChore.assignedTo)
+
             dialog.show()
 
             saveButton.setOnClickListener {
@@ -113,15 +161,13 @@ class ChoreListAdapter(private val list:ArrayList<Chore>,
                     && (!TextUtils.isEmpty(aBy))
                     && (!TextUtils.isEmpty(aTo))
                 ) {
-                   // var chore = Chore()
-                    chore.choreName = name
-                    chore.assignedBy = aBy
-                    chore.assignedTo = aTo
-                    //chore.id = mPosition
+                    updatedChore.choreName = name
+                    updatedChore.assignedBy = aBy
+                    updatedChore.assignedTo = aTo
 
-                    dbHandler.UpdateChore(chore)
-                    notifyItemChanged(adapterPosition, chore)
-
+                    context.choresViewModel.UpdateChore(updatedChore)
+                    mList.set(adapterPosition,updatedChore)
+                    notifyItemChanged(adapterPosition, updatedChore)
                     dialog.dismiss()
                 } else {
 

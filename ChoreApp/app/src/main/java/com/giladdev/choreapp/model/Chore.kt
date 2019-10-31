@@ -24,7 +24,7 @@ class Chore() {
         var dateFormat = DateFormat.getDateInstance()
         var formattedDate: String = dateFormat.format(Date(timerAssigned).time)
 
-        return "Created: ${formattedDate}"
+        return formattedDate
     }
 
 }

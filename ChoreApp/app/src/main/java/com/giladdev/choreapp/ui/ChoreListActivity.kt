@@ -4,32 +4,31 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.giladdev.choreapp.R
-import com.giladdev.choreapp.model.Chore
-import com.giladdev.choreapp.model.ChoresDataBaseHandler
+import com.giladdev.choreapp.viewmodel.ChoresViewModel
 import kotlinx.android.synthetic.main.activity_chore_list.*
-import kotlinx.android.synthetic.main.activity_main.view.*
+import androidx.lifecycle.ViewModelProviders
+import com.giladdev.choreapp.model.ChoresEntity
 import kotlinx.android.synthetic.main.popup.view.*
 
 class ChoreListActivity : AppCompatActivity() {
 
-    lateinit private var dbHandler: ChoresDataBaseHandler
     lateinit private var dialogBuilder: AlertDialog.Builder
     lateinit private var dialog: AlertDialog
+    lateinit var choresViewModel : ChoresViewModel
+    lateinit var choreAdapter : ChoreListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chore_list)
 
-        var choresList = ArrayList<Chore>()
-        var choreListItems = ArrayList<Chore>()
-
-        lateinit var choreAdapter : ChoreListAdapter
+        var choreListItems = ArrayList<ChoresEntity>()
 
         choreAdapter = ChoreListAdapter(choreListItems, this)
 
@@ -39,27 +38,31 @@ class ChoreListActivity : AppCompatActivity() {
 
         }
 
-        dbHandler = ChoresDataBaseHandler(this)
+        choresViewModel = ViewModelProviders.of(this).get(ChoresViewModel::class.java)
+        choresViewModel.mContext = this
+        choresViewModel.refresh()
 
-        choresList = dbHandler.readChores()
+        observeViewModel()
 
-        choresList.reverse()
 
-        choreAdapter.notifyDataSetChanged()
-
-        for (c in choresList.iterator()){
-            var chore = Chore()
-
-            chore.choreName = "Chore: ${c.choreName}"
-            chore.assignedTo = "Assigned To: ${c.assignedTo}"
-            chore.assignedBy = "Assigned By: ${c.assignedBy}"
-            chore.timerAssigned = c.timerAssigned
-            chore.id = c.id
-            choreListItems.add(chore)
-
-        }
     }
 
+    fun observeViewModel()
+    {
+        choresViewModel.choresList.observe(this, Observer {list:List<ChoresEntity>->
+            list.let{
+                choreAdapter.UpdateChores(it)
+            }
+        } )
+
+        choresViewModel.deleteChore.observe(this, Observer {toDelete:Boolean->
+            toDelete.let{
+                if (it==true){
+                    Toast.makeText(this, "Chore Deleted!",Toast.LENGTH_LONG).show()
+                    choresViewModel.deleteChore.value = false
+                }
+            }})
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.topmenu,menu)
         CreatePopupDialog()
@@ -89,27 +92,26 @@ class ChoreListActivity : AppCompatActivity() {
             var name = choreName.text.toString().trim()
             var aBy = assignedBy.text.toString().trim()
             var aTo = assignedTo.text.toString().trim()
+            val currentTime = System.currentTimeMillis()
 
             if (!TextUtils.isEmpty(name)
                 && (!TextUtils.isEmpty(aBy))
                 && (!TextUtils.isEmpty(aTo))){
-                var chore = Chore()
-                chore.choreName = name
-                chore.assignedBy = aBy
-                chore.assignedTo = aTo
+                var chore = ChoresEntity(choreName = name, assignedTo = aTo, assignedBy = aBy, timerAssigned = currentTime)
 
-                dbHandler.CreateChore(chore)
+                choresViewModel.AddChore(chore)
 
                 dialog.dismiss()
 
                 startActivity(Intent(this,ChoreListActivity::class.java))
-                finish()
 
+                finish()
             }
             else{
+                Toast.makeText(this, "Fill All Fields ... ",Toast.LENGTH_LONG).show()
 
 
-        }
+            }
 
 
         }
