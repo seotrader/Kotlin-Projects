@@ -9,13 +9,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.giladdev.rickyandmarty.R
 import java.lang.Exception
 
-fun getProgressDrawable(context : Context) : CircularProgressDrawable {
-    return CircularProgressDrawable(context).apply {
+fun getProgressDrawable(context : Context) =
+     CircularProgressDrawable(context).apply {
         centerRadius = 50f
         strokeWidth = 10f
         start()
     }
-}
+
 
 fun ImageView.loadImage(uri: String?, progressDrawable: CircularProgressDrawable){
     val options = RequestOptions()
@@ -30,7 +30,7 @@ fun ImageView.loadImage(uri: String?, progressDrawable: CircularProgressDrawable
     }
     catch (e : Exception)
     {
-        Log.d("Excepion",e.message)
+        Log.d("Excepion",e.message.toString())
     }
 
 }

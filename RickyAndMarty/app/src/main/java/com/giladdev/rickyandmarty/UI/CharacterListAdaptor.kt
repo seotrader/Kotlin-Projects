@@ -1,10 +1,6 @@
 package com.giladdev.rickyandmarty.UI
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.AsyncTask
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +16,6 @@ import com.giladdev.rickyandmarty.Util.getProgressDrawable
 import com.giladdev.rickyandmarty.Util.loadImage
 import com.giladdev.rickyandmarty.model.CharacterList
 import kotlinx.android.synthetic.main.list_row.view.*
-import java.net.URL
 
 class CharacterListAdaptor(private val list:ArrayList<Character>,private val context:Context) : RecyclerView.Adapter<CharacterListAdaptor.ViewHolder>() {
     val lastLine = MutableLiveData<Boolean>()
@@ -30,9 +25,10 @@ class CharacterListAdaptor(private val list:ArrayList<Character>,private val con
         list.clear()
         lastLine.value = false
     }
-    fun UpdateCharacters(newCharacters: CharacterList)
+    fun updateCharacters(newCharacters: CharacterList)
     {
-        list.addAll(newCharacters.characterList!!.toTypedArray())
+        list.addAll(newCharacters.characterList.toTypedArray())
+        lastLine.value = false
         notifyDataSetChanged()
     }
 
@@ -45,28 +41,25 @@ class CharacterListAdaptor(private val list:ArrayList<Character>,private val con
 
     }
 
-    override fun getItemCount(): Int {
-        return list.size
-    }
+    override fun getItemCount() = list.size
+
 
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         fun bindItem(character : Character)
         {
-            var name : TextView = itemView.findViewById(R.id.nameTextView) as TextView
-            var gender : TextView = itemView.findViewById(R.id.GenderTextView) as TextView
+            var name : TextView = itemView.findViewById<TextView>(R.id.nameTextView)
+            var gender : TextView = itemView.findViewById<TextView>(R.id.GenderTextView)
             var image : ImageView = itemView.imageView
 
 
-            val progressDrawable : CircularProgressDrawable = getProgressDrawable(itemView.context)
-
+            val progressDrawable = getProgressDrawable(itemView.context)
 
             name.text = character.name
             gender.text = character.gender
             image.loadImage(character.image,progressDrawable )
             image.visibility = View.VISIBLE
-/*
 
-*/
+
             itemView.setOnClickListener {
                 Toast.makeText(it.context, name.text,Toast.LENGTH_LONG ).show()
             }

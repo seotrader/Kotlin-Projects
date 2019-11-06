@@ -21,7 +21,7 @@ class CharectersApiService{
 
     fun getCountires() : Single<CharacterList>
     {
-        return api.GetCharecters(pageNumber)
+        return api.getCharecters(pageNumber)
     }
 }
 

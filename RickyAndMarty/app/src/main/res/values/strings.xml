@@ -4,4 +4,7 @@
     <string name="gendertext">Gender</string>
     <string name="imagedescription">imagedescription</string>
     <string name="errorTextView">THIS IS AN ERROR</string>
+    <string name="ItemText">Connection Mode</string>
+    <string name="itemSave">Save Data Offline</string>
+    <string name="connectivityDialogTitle">How do you want to save the data?</string>
 </resources>
