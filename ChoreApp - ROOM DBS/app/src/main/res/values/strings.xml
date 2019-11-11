@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ChoreApp</string>
+    <string name="enterchorehint">Enter a chore</string>
+    <string name="histassignto">Assign to</string>
+    <string name="assignedByTextEdit">Assigned By...</string>
+    <string name="Buttontext">Save Chore</string>
+    <string name="image_description">Icon of a Chore</string>
+    <string name="TextViewText">Chore Name</string>
+    <string name="AddtoChore">Add Chore</string>
+</resources>
