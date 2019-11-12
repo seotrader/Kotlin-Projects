@@ -9,5 +9,6 @@ data class CharecterDBEntity(
     val id: Int? = null,
     val name: String,
     val gender: String,
-    val url: String)
+    val url: String,
+    var imageRawData : String)
 

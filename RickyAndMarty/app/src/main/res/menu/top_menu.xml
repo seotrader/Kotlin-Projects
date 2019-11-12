@@ -6,10 +6,4 @@
         android:id="@+id/connection_mode"
         android:title="@string/ItemText"
         android:visible="true" />
-    <item
-        android:id="@+id/save"
-        android:enabled="true"
-        android:icon="@android:drawable/ic_menu_save"
-        android:title="@string/itemSave"
-        android:visible="true" />
 </menu>

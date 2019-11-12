@@ -14,6 +14,8 @@ data class Info(
 data class Character(
     var name:String?,
     var gender:String?,
-    var image:String?)
+    var image:String?,
+    var id:Int?,
+    var imageRawData:String?)
 
 

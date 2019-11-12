@@ -5,14 +5,20 @@ import androidx.room.*
 
 interface CharactersDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertChore(chore: CharecterDBEntity)
+    fun insertCharecters(chore: CharecterDBEntity)
 
     @Update
-    fun updateChore(chore: CharecterDBEntity)
+    fun updateCharecters(chore: CharecterDBEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(choreList: List<CharecterDBEntity>)
 
     @Delete
     fun deleteChore(chore: CharecterDBEntity)
 
+    @Query ("DELETE FROM characters")
+    fun deleteAll()
+
     @Query("SELECT * FROM characters")
-    fun getChores(): List<CharecterDBEntity>
+    fun getCharacters(): List<CharecterDBEntity>
 }
