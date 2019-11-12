@@ -1,4 +1,4 @@
-This app demonstrade the use of the following Androind technologies via Kotlin:
+This app demonstrades the use of the following Androind technologies via Kotlin:
 
 1. Retrofit to read a remote JSON files via the API https://rickandmortyapi.com/api/character/
 2. Using RXJAVA2 to make the Retrofit calls
