@@ -1,10 +1,9 @@
 package com.giladdev.rickyandmarty.model
 
-import retrofit2.http.GET
-import retrofit2.Call
-
+import io.reactivex.Single
+import retrofit2.http.*
 
 interface Api {
-    @GET("character")
-    fun GetCharecters() : Call<CharacterList>
+    @GET("character/")
+    fun getCharecters(@Query("page") page : String?) : Single<CharacterList>
     }
