@@ -5,10 +5,10 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="0dp"
+        android:layout_width="99dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:padding="@dimen/Standardpadding"/>
+        android:padding="@dimen/Standardpadding" />
 
     <LinearLayout
         android:layout_width="0dp"

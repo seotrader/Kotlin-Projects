@@ -19,12 +19,11 @@ class ListViewModel : ViewModel() {
     init {
         DaggerApiComponenet.create().inject(this)
     }
-    val countires = MutableLiveData<List<Country>>()
+    val countires = MutableLiveData<MutableList<Country>>()
     val countryLoadError = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
 
     private val disposable = CompositeDisposable()
-
 
     fun refresh() {
         FetchCountires()
@@ -38,7 +37,7 @@ class ListViewModel : ViewModel() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(object : DisposableSingleObserver<List<Country>>(){
                         override fun onSuccess(value: List<Country>?) {
-                            countires.value = value
+                            countires.value = value!!.toMutableList()
                             countryLoadError.value = false
                             loading.value = false
                         }

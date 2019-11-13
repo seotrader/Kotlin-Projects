@@ -41,6 +41,7 @@ class CountryListAdaptor( var countries: ArrayList<Country>) :RecyclerView.Adapt
             countryName.text = country.countryName
             countryCapital.text = country.capital
             imageView.loadImage(country.flag, progressDrawable)
+            imageView.visibility = View.VISIBLE
     }
 
 

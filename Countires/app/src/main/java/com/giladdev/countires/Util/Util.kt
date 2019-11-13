@@ -24,4 +24,5 @@ fun ImageView.loadImage(uri: String?, progressDrawable: CircularProgressDrawable
         .load(uri)
         .into(this)
 
+
 }
