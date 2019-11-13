@@ -10,3 +10,7 @@ Picasso
 Structure:
 
 MVVM
+
+---
+
+Check screenshots to see how the application looks like
