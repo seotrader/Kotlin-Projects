@@ -2,7 +2,7 @@ This app shows an example how to read a list of countires using a JSON URL and s
 
 https://imgur.com/qyfDDlN
 
-Technologies used:
+## Technology Stack
 
 1. Retrofit
 2. RXJava2 Wish Single
