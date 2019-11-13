@@ -2,7 +2,8 @@
 
 This app shows an example how to read a list of countires using a JSON URL and showing the imageso of each country
 
-![](https://imgur.com/qyfDDlN)
+## Screenshots of the app
+https://imgur.com/qyfDDlN
 
 ## Technology Stack
 
