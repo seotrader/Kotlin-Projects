@@ -8,3 +8,4 @@ Technologies used:
 4. MVVM architecture
 5. RecylerView
 6. LiveData ovservers
+7. Unitest with RXJava mocking
