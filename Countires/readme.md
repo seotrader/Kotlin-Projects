@@ -6,10 +6,18 @@ https://imgur.com/qyfDDlN
 
 ## Technology Stack
 
-1. Retrofit
-2. RXJava2 Wish Single
-3. Glide to load the images
-4. MVVM architecture
-5. RecylerView
-6. LiveData ovservers
-7. Unitest with RXJava mocking
+* Android
+* Java
+
+Architectural Pattern
+* MVVM
+
+API
+* JSON
+
+Libraries
+
+* Retrofit
+* RXJava2 Wish Single
+* Glide to load the images
+* Unitest with RXJava mocking
