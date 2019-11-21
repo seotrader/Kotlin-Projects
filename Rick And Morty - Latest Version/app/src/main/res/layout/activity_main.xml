@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/topFrame"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainapplayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".UI.MainActivity">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/errorTextView"
+                    app:layout_constraintEnd_toStartOf="@+id/listRecyclerView"
+                    app:layout_constraintHorizontal_bias="0.501"
+                    app:layout_constraintStart_toEndOf="@+id/listRecyclerView"
+                    app:layout_constraintTop_toBottomOf="@+id/listRecyclerView"
+                    app:layout_constraintVertical_bias="0.654" />
+
+                <TextView
+                    android:id="@+id/errorTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/errorTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:layout_editor_absoluteY="283dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/listRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/holo_blue_bright"
+                    tools:layout_editor_absoluteY="-34dp">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

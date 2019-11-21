@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="small_margin">10dp</dimen>
+    <dimen name="medium_margin">15dp</dimen>
+    <dimen name="small_image">100dp</dimen>
+    <dimen name="CardViewWidth">410dp</dimen>
+    <dimen name="CardViewHeight">120dp</dimen>
+    <dimen name="CornersRadius">45dp</dimen>
+
+</resources>

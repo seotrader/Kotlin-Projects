@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Rick And Morty</string>
+    <string name="nametext">name</string>
+    <string name="gendertext">Gender</string>
+    <string name="imagedescription">imagedescription</string>
+    <string name="errorTextView">THIS IS AN ERROR</string>
+    <string name="ItemText">Connection Mode</string>
+    <string name="itemSave">Save Data Offline</string>
+    <string name="connectivityDialogTitle">How do you want to save the data?</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text">Landscape mode not yet implemented</string>
+    <string name="charactername">Name of Character</string>
+    <string name="sexofcharacter">Sex of Character</string>
+    <string name="backbuttontext">BACK</string>
+</resources>
