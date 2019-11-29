@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "430379249621",
+    "firebase_url": "https://wowchat-87082.firebaseio.com",
+    "project_id": "wowchat-87082",
+    "storage_bucket": "wowchat-87082.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430379249621:android:95fa5cdec26d2bec26575c",
+        "android_client_info": {
+          "package_name": "com.giladdev.WowChat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430379249621-glbf36sv74smh3in6h6h4vrapkm4pee1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.giladdev.WowChat",
+            "certificate_hash": "7b128b1cdcc000ff01cd706dcc6d0b14694caa76"
+          }
+        },
+        {
+          "client_id": "430379249621-ps404s3abd2r3rmvg59emftd7bkv3n3j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVODMeRf8fzVJo315k_8XtnT0jCDjJDnw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430379249621-ps404s3abd2r3rmvg59emftd7bkv3n3j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

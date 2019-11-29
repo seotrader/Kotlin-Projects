@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg"
+    tools:context="UI.CreateAccountActivity">
+
+<androidx.cardview.widget.CardView
+        android:id="@+id/cv"
+        android:layout_width="300dp"
+        android:background="@android:color/white"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="12dp"
+        app:cardCornerRadius="13dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="50dp">
+        </TextView>
+
+        
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp">
+
+            <EditText
+                android:id="@+id/emailEditBoxLA"
+                android:hint="Enter Email"
+                android:padding="10dp"
+                android:inputType="textEmailAddress"
+                android:layout_width="match_parent"
+                android:textCursorDrawable="@drawable/bg_input_cursor_2"
+                android:background="@drawable/selector_bg_edit_2"
+                android:textSize="14sp"
+                android:layout_height="wrap_content">
+            </EditText>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/loginpasswordEditBoxLA"
+                android:layout_marginTop="15dp"
+                android:padding="10dp"
+                android:textColor="#f0f7f4"
+                android:background="@drawable/selector_bg_edit_2"
+                android:textCursorDrawable="@drawable/bg_input_cursor_2"
+                android:hint="Enter Password"
+                android:inputType="textPassword"
+                android:textSize="14sp">
+            </EditText>
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:stateListAnimator="@drawable/state_list_animator_z"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="10dp"
+            android:text="LOGIN"
+            android:textColor="#d3d3d3"
+            android:id="@+id/loginButtonLA"
+            android:background="@drawable/bt_shape">
+        </Button>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+</RelativeLayout>
