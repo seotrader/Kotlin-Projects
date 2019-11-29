@@ -11,6 +11,7 @@ This is a complete Firebase cloud chat app, it allows you to do the following fe
 ## Screenshots of the app
 
 https://imgur.com/qggc7qM
+
 https://imgur.com/CcsI02x
 
 
