@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.giladdev.wowchat">
+    package="com.almitasoft.wowchat">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,20 +12,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UI.Activities.ChatActivity"
-            android:parentActivityName="UI.DashBoardActivity"/>
+        <activity android:name="com.almitasoft.wowchat.UI.Activities.ChatActivity"
+            android:parentActivityName="com.almitasoft.wowchat.UI.Activities.DashBoardActivity"/>
 
-        <activity android:name=".UI.Activities.ProfileActivity"
-            android:parentActivityName="UI.DashBoardActivity"/>
+        <activity android:name="com.almitasoft.wowchat.UI.Activities.ProfileActivity"
+            android:parentActivityName="com.almitasoft.wowchat.UI.Activities.DashBoardActivity"/>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
-        <activity android:name="UI.StatusActivity" />
-        <activity android:name="UI.SettingsActivity" />
-        <activity android:name="UI.DashBoardActivity" />
-        <activity android:name="UI.CreateAccountActivity" />
-        <activity android:name="UI.LoginActivity" />
-        <activity android:name="UI.MainActivity">
+        <activity android:name="com.almitasoft.wowchat.UI.Activities.StatusActivity" />
+        <activity android:name="com.almitasoft.wowchat.UI.Activities.SettingsActivity" />
+        <activity android:name="com.almitasoft.wowchat.UI.Activities.DashBoardActivity" />
+        <activity android:name="com.almitasoft.wowchat.UI.Activities.CreateAccountActivity" />
+        <activity android:name="com.almitasoft.wowchat.UI.Activities.LoginActivity" />
+        <activity android:name="com.almitasoft.wowchat.UI.Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkBg"
-    tools:context="com.giladdev.wowchat.UI.Activities.ProfileActivity">
+    tools:context="com.almitasoft.wowchat.UI.Activities.ProfileActivity">
 
     <ImageView
         android:id="@+id/profileImage"

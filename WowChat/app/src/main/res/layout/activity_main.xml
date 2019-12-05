@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     app:layout_anchorGravity="center"
     android:layout_height="match_parent"
-    tools:context="UI.CreateAccountActivity">
+    tools:context=".UI.Activities.CreateAccountActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv"

@@ -15,5 +15,8 @@
     <string name="ChangePicture">Change Picture</string>
     <string name="ChangeStatus">Change Status</string>
     <string name="sendmessage">Send Message</string>
+    <string name="editText">Chat Messages</string>
+    <string name="textdescription">Last Chat Lines</string>
+    <string name="displayname">Display Name</string>
 
 </resources>
