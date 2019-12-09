@@ -1,6 +1,6 @@
 ## Wow Chat App
 
-This is a complete Firebase cloud chat app, it allows you to do the following features:
+This is a complete Firebase cloud multi-user chat app, it allows you to do the following features:
 
 - Add new user
 - Login
@@ -11,7 +11,6 @@ This is a complete Firebase cloud chat app, it allows you to do the following fe
 ## Screenshots of the app
 
 https://imgur.com/qggc7qM
-
 https://imgur.com/CcsI02x
 
 
