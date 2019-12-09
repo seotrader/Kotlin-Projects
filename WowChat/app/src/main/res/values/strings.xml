@@ -18,5 +18,7 @@
     <string name="editText">Chat Messages</string>
     <string name="textdescription">Last Chat Lines</string>
     <string name="displayname">Display Name</string>
+    <string name="forgotPasswordText"><u>Forgot Password?</u></string>
+    <string name="loginText">Login</string>
 
 </resources>

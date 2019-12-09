@@ -41,7 +41,7 @@ class ChatActivity : AppCompatActivity() {
         userID = intent.extras!!.getString("userId").toString()
         var profileImgLink = intent.extras!!.get("profile").toString()
         mLinearLayoutManager = LinearLayoutManager(this)
-        mLinearLayoutManager!!.stackFromEnd = true
+        mLinearLayoutManager.stackFromEnd = true
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         // enable to attach custome display
@@ -87,71 +87,69 @@ class ChatActivity : AppCompatActivity() {
                 position: Int,
                 friendlyMessage: FriendlyMessage
             ) {
-                if (friendlyMessage != null){
-                    holder!!.bindView(friendlyMessage)
 
-                    var currentUserID = mFireBaseUser!!.uid
+                holder.bindView(friendlyMessage)
 
-                    var isMe: Boolean = friendlyMessage.id.equals(currentUserID)
+                var currentUserID = mFireBaseUser!!.uid
 
-                    if (isMe){
-                        // Me to the right side
-                        holder.profileImageViewRight!!.visibility = View.VISIBLE
-                        holder.profileImageView!!.visibility = View.GONE
-                        holder.messageTextView!!.gravity = (Gravity.CENTER_VERTICAL or Gravity.RIGHT)
-                        holder.messengerTextView!!.gravity = (Gravity.CENTER_VERTICAL or Gravity.RIGHT)
+                var isMe: Boolean = friendlyMessage.id.equals(currentUserID)
 
-                        // get image URL , for me
-                        mFireBaseDatabaseRef!!.child("Users")
-                            .child(currentUserID)
-                            .addValueEventListener(object: ValueEventListener{
-                                override fun onCancelled(p0: DatabaseError) {
+                if (isMe){
+                    // Me to the right side
+                    holder.profileImageViewRight!!.visibility = View.VISIBLE
+                    holder.profileImageView!!.visibility = View.GONE
+                    holder.messageTextView!!.gravity = (Gravity.CENTER_VERTICAL or Gravity.RIGHT)
+                    holder.messengerTextView!!.gravity = (Gravity.CENTER_VERTICAL or Gravity.RIGHT)
 
-                                }
+                    // get image URL , for me
+                    mFireBaseDatabaseRef.child("Users")
+                        .child(currentUserID)
+                        .addValueEventListener(object: ValueEventListener{
+                            override fun onCancelled(p0: DatabaseError) {
 
-                                override fun onDataChange(dataSnapShot: DataSnapshot) {
-                                    var imageUrl = dataSnapShot.child("thumb_image").value.toString()
-                                    var displayName = dataSnapShot.child("display name").value.toString()
+                            }
 
-                                    holder.messengerTextView!!.text = "I wrote..."
+                            override fun onDataChange(dataSnapShot: DataSnapshot) {
+                                var imageUrl = dataSnapShot.child("thumb_image").value.toString()
 
-                                    Picasso.get().load(imageUrl)
-                                        .placeholder(R.drawable.profile_img)
-                                        .into(holder.profileImageViewRight)
+                                holder.messengerTextView!!.text = "I wrote..."
 
-                                }
-                            })
-                    }else{
-                        // to the other person , show image view to the left side
-                        // Me to the right side
-                        holder.profileImageViewRight!!.visibility = View.GONE
-                        holder.profileImageView!!.visibility = View.VISIBLE
-                        holder.messageTextView!!.gravity = (Gravity.CENTER_VERTICAL or Gravity.LEFT)
-                        holder.messengerTextView!!.gravity = (Gravity.CENTER_VERTICAL or Gravity.LEFT)
+                                Picasso.get().load(imageUrl)
+                                    .placeholder(R.drawable.profile_img)
+                                    .into(holder.profileImageViewRight)
 
-                        // get image URL , for me
-                        mFireBaseDatabaseRef!!.child("Users")
-                            .child(userID)
-                            .addValueEventListener(object: ValueEventListener{
-                                override fun onCancelled(p0: DatabaseError) {
+                            }
+                        })
+                }else{
+                    // to the other person , show image view to the left side
+                    // Me to the right side
+                    holder.profileImageViewRight!!.visibility = View.GONE
+                    holder.profileImageView!!.visibility = View.VISIBLE
+                    holder.messageTextView!!.gravity = (Gravity.CENTER_VERTICAL or Gravity.LEFT)
+                    holder.messengerTextView!!.gravity = (Gravity.CENTER_VERTICAL or Gravity.LEFT)
 
-                                }
+                    // get image URL , for me
+                    mFireBaseDatabaseRef.child("Users")
+                        .child(userID)
+                        .addValueEventListener(object: ValueEventListener{
+                            override fun onCancelled(p0: DatabaseError) {
 
-                                override fun onDataChange(dataSnapShot: DataSnapshot) {
-                                    var imageUrl = dataSnapShot.child("thumb_image").value.toString()
-                                    var displayName = dataSnapShot.child("display name").value.toString()
+                            }
 
-                                    holder.messengerTextView!!.text =
-                                        "${friendlyMessage.from} wrote..."
+                            override fun onDataChange(dataSnapShot: DataSnapshot) {
+                                var imageUrl = dataSnapShot.child("thumb_image").value.toString()
 
-                                    Picasso.get().load(imageUrl.toString())
-                                        .placeholder(R.drawable.profile_img)
-                                        .into(holder.profileImageView)
+                                holder.messengerTextView!!.text =
+                                    "${friendlyMessage.from} wrote..."
 
-                                }
-                            })
-                    }
+                                Picasso.get().load(imageUrl.toString())
+                                    .placeholder(R.drawable.profile_img)
+                                    .into(holder.profileImageView)
+
+                            }
+                        })
                 }
+
             }
         }
 
@@ -163,9 +161,9 @@ class ChatActivity : AppCompatActivity() {
                 var targetUserDisplayName = intent.extras!!.get("name")
                 var targetUserID = intent.extras!!.get("userId")
                 var mCurrentUserId = mFireBaseUser!!.uid
-                var currentUserDisplayName : String="NO USER"
+                var currentUserDisplayName : String
 
-                mFireBaseDatabaseRef!!.child("Users")
+                mFireBaseDatabaseRef.child("Users")
                     .child(mCurrentUserId).addValueEventListener(object: ValueEventListener{
                         override fun onCancelled(p0: DatabaseError) {
                             Log.d("Firebase Error", p0.message)
@@ -174,18 +172,16 @@ class ChatActivity : AppCompatActivity() {
                         override fun onDataChange(snapShot: DataSnapshot) {
                             currentUserDisplayName = snapShot.child("display name").value.toString()
 
-                            var sortedUIDs = (userID+mCurrentUserId).toCharArray().sorted()
-
                             var friendlyMessage = FriendlyMessage(mCurrentUserId,
                                 String().returnJoinString(userID,mCurrentUserId),
                                 messageEdt.text.toString().trim(),
                                 currentUserDisplayName.toString().trim(),
                                 targetUserDisplayName.toString().trim())
 
-                            mFireBaseDatabaseRef!!.child("messages").child(targetUserID.toString())
+                            mFireBaseDatabaseRef.child("messages").child(targetUserID.toString())
                                 .push().setValue(friendlyMessage)
 
-                            mFireBaseDatabaseRef!!.child("messages").child(mCurrentUserId.toString())
+                            mFireBaseDatabaseRef.child("messages").child(mCurrentUserId.toString())
                                 .push().setValue(friendlyMessage)
 
 

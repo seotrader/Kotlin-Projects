@@ -20,11 +20,19 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        title = "Login"
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+
+        forgotPasswordText.setOnClickListener {
+            startActivity(Intent(this,ForgotPasswordActivity::class.java))
+        }
+
         loginButtonLA.setOnClickListener {
             var email = emailEditBoxLA.text.toString().trim()
             var password = loginpasswordEditBoxLA.text.toString().trim()
 
-            mAuth = FirebaseAuth.getInstance() as FirebaseAuth
+            mAuth = FirebaseAuth.getInstance()
 
             if (!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
                 loginUser(email, password)

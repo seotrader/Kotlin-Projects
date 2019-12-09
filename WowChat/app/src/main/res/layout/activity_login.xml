@@ -10,9 +10,9 @@
 
 <androidx.cardview.widget.CardView
         android:id="@+id/cv"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:background="@android:color/white"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:layout_centerInParent="true"
         app:cardUseCompatPadding="true"
         app:cardElevation="12dp"
@@ -27,13 +27,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:layout_marginStart="@dimen/mediumPadding"
+            android:layout_marginTop="50dp"
+            android:text="@string/loginText"
             android:textColor="#fff"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="50dp">
-        </TextView>
+            android:textSize="@dimen/MediumTextSize"
+            android:textStyle="bold"></TextView>
 
         
         <LinearLayout
@@ -52,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:textCursorDrawable="@drawable/bg_input_cursor_2"
                 android:background="@drawable/selector_bg_edit_2"
-                android:textSize="14sp"
+                android:textSize="@dimen/loginTextSize"
                 android:layout_height="wrap_content">
             </EditText>
             <EditText
@@ -66,20 +65,31 @@
                 android:textCursorDrawable="@drawable/bg_input_cursor_2"
                 android:hint="Enter Password"
                 android:inputType="textPassword"
-                android:textSize="14sp">
+                android:textSize="@dimen/loginTextSize">
             </EditText>
 
         <Button
             android:layout_width="150dp"
             android:layout_height="50dp"
+            android:layout_marginTop="@dimen/mediumPadding"
             android:stateListAnimator="@drawable/state_list_animator_z"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
             android:text="LOGIN"
             android:textColor="#d3d3d3"
             android:id="@+id/loginButtonLA"
             android:background="@drawable/bt_shape">
         </Button>
+
+            <TextView
+                android:id="@+id/forgotPasswordText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/mediumPadding"
+                android:text="@string/forgotPasswordText"
+                android:textSize="@dimen/loginTextSize"
+                android:textStyle="bold" />
+
         </LinearLayout>
 
     </LinearLayout>

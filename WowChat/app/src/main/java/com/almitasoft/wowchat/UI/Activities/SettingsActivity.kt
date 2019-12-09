@@ -47,7 +47,6 @@ class SettingsActivity : AppCompatActivity() {
                 var displayName = dataSnapShot.child("display name").value
                 var image = dataSnapShot.child("image").value
                 var status = dataSnapShot.child("status").value
-                var thumbnail = dataSnapShot.child("thumb_image").value
 
                 statusTVID.text = status.toString()
                 displayNameTVID.text = displayName.toString()
@@ -79,6 +78,8 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
+        super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == GALLERY_ID && resultCode == Activity.RESULT_OK) {
             var image: Uri? = data!!.data
 
@@ -92,8 +93,8 @@ class SettingsActivity : AppCompatActivity() {
 
             if (resultCode == Activity.RESULT_OK){
                 val resultUri = result.uri
-                var userId = mCurrentBaseUser!!.uid
-                var thumbFile = File(resultUri.path)
+                var userId = mCurrentBaseUser.uid
+                var thumbFile = File(resultUri.path.toString())
 
                 // smaller version of the image
                 var thumbBitmap = Compressor(this)
@@ -106,11 +107,11 @@ class SettingsActivity : AppCompatActivity() {
                 var byteArray = ByteArrayOutputStream()
                 thumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100,byteArray)
                 var thumbByteArray = byteArray.toByteArray()
-                var filePath = mStorageRef!!.child("chat_profile_images")
+                var filePath = mStorageRef.child("chat_profile_images")
                     .child(userId+".jpg")
 
                 // create another directory for thumbImages ( smallaer compressed images)
-                var thumbFilePath = mStorageRef!!.child("chat_profile_images")
+                var thumbFilePath = mStorageRef.child("chat_profile_images")
                     .child("thumbs  ")
                     .child(userId+".jpg")
 
@@ -129,7 +130,7 @@ class SettingsActivity : AppCompatActivity() {
                         var uploadTask : UploadTask = thumbFilePath
                             .putBytes(thumbByteArray)
                         uploadTask.addOnCompleteListener {
-                            var thumbUrl : String?=null
+                            var thumbUrl : String
                             // it.result!!.storage.downloadUrl.toString()
                             if (it.isSuccessful){
                                 it.result!!.storage.downloadUrl.addOnCompleteListener {
@@ -138,7 +139,7 @@ class SettingsActivity : AppCompatActivity() {
                                     updateObj.put("image",downloadUrl.toString())
                                     updateObj.put("thumb_image",thumbUrl.toString())
                                     // save the profile image
-                                    mDataBase!!.updateChildren(updateObj)
+                                    mDataBase.updateChildren(updateObj)
                                         .addOnCompleteListener {
                                             if (it.isSuccessful){
                                                 Toast.makeText(this, "Profile Image Saved!",

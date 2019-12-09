@@ -69,5 +69,6 @@ class UserFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         userAdaper.stopListening()
+
     }
 }

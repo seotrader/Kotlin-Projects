@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
-class SectionPageAdapter (fm : FragmentManager)  : FragmentPagerAdapter(fm) {
+class SectionPageAdapter (fm : FragmentManager)  : FragmentPagerAdapter(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT ) {
     override fun getItem(position: Int): Fragment {
         when (position){
             0 ->{

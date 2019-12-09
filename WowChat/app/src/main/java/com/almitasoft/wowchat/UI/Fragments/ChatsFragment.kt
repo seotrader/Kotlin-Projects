@@ -35,6 +35,11 @@ class ChatsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_chats, container, false)
     }
 
+    override fun onStop() {
+        chatsList.clear()
+        super.onStop()
+
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,11 +65,9 @@ class ChatsFragment : Fragment() {
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
-                    var numRecords = p0.childrenCount
                     var lastUserID : String = ""
-                    var diffDestHash = hashMapOf<String,String>()
 
-                    for (snapShort in p0.children) {
+                    p0.children.forEach {snapShort->
                         var dest_id = snapShort.child("dest_id").value.toString()
                         var from = snapShort.child("from").value.toString()
                         var to = snapShort.child("to").value.toString()
@@ -73,7 +76,6 @@ class ChatsFragment : Fragment() {
 
                         if  (id != currentUser!!.uid){
                             lastUserID = id
-                            diffDestHash[dest_id] = id
                         }
 
                         if (id == currentUser!!.uid)
@@ -92,19 +94,14 @@ class ChatsFragment : Fragment() {
 
                         chatHash[dest_id] = message
                     }
-                    for ( (k,v) in chatHash){
-                        chatsList.add(v)
+
+                    chatHash.forEach { _, u ->
+                        chatsList.add(u)
                     }
 
-                    chatsAdapter?.let{
-                        it.notifyDataSetChanged()
-                    }
+                    chatsAdapter.notifyDataSetChanged()
                 }
             })
         }
-
-
-
-
     }
 }

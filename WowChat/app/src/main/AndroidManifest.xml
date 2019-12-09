@@ -7,25 +7,30 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/wowchaticon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/wowchaticon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.almitasoft.wowchat.UI.Activities.ChatActivity"
-            android:parentActivityName="com.almitasoft.wowchat.UI.Activities.DashBoardActivity"/>
-
-        <activity android:name="com.almitasoft.wowchat.UI.Activities.ProfileActivity"
-            android:parentActivityName="com.almitasoft.wowchat.UI.Activities.DashBoardActivity"/>
+        <activity android:name=".UI.Activities.ForgotPasswordActivity"
+            android:parentActivityName=".UI.Activities.LoginActivity"/>
+        <activity
+            android:name=".UI.Activities.ChatActivity"
+            android:parentActivityName=".UI.Activities.DashBoardActivity" />
+        <activity
+            android:name=".UI.Activities.ProfileActivity"
+            android:parentActivityName=".UI.Activities.DashBoardActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
-        <activity android:name="com.almitasoft.wowchat.UI.Activities.StatusActivity" />
-        <activity android:name="com.almitasoft.wowchat.UI.Activities.SettingsActivity" />
-        <activity android:name="com.almitasoft.wowchat.UI.Activities.DashBoardActivity" />
-        <activity android:name="com.almitasoft.wowchat.UI.Activities.CreateAccountActivity" />
-        <activity android:name="com.almitasoft.wowchat.UI.Activities.LoginActivity" />
-        <activity android:name="com.almitasoft.wowchat.UI.Activities.MainActivity">
+        <activity android:name=".UI.Activities.StatusActivity" />
+        <activity android:name=".UI.Activities.SettingsActivity" />
+        <activity android:name=".UI.Activities.DashBoardActivity" />
+        <activity android:name=".UI.Activities.CreateAccountActivity" />
+        <activity android:name=".UI.Activities.LoginActivity"
+            android:parentActivityName=".UI.Activities.MainActivity"
+            />
+        <activity android:name=".UI.Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

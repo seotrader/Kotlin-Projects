@@ -55,7 +55,7 @@ class CreateAccountActivity : AppCompatActivity() {
                         userObj.put("image","default")
                         userObj.put("thumb_image", "default")
 
-                        mDataBase.setValue(userObj).addOnCompleteListener {task->
+                        mDataBase.setValue(userObj).addOnCompleteListener { task ->
                             if (task.isSuccessful){
                                 var dashboardIntent = Intent(this, DashBoardActivity::class.java)
                                 dashboardIntent.putExtra("name", displayName)

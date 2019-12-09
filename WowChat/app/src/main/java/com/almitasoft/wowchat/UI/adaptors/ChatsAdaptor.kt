@@ -29,19 +29,16 @@ class ChatsAdaptor(private val list : ArrayList<FriendlyMessage>,
         fun bindView(item : FriendlyMessage){
             displayName.text = "Chat With "+item.from
             chatText.text = item.text
-            var thumbImageUrl : String?=null
-
-            var mUserDatabase : DatabaseReference?=null
-            var currentUser : FirebaseUser?= null
-
-            currentUser = FirebaseAuth.getInstance().currentUser
+            var thumbImageUrl : String
+            var mUserDatabase : DatabaseReference
+            var currentUser = FirebaseAuth.getInstance().currentUser
 
             currentUser?.let{
                 mUserDatabase = FirebaseDatabase.getInstance().reference
                     .child("Users")
                     .child(item.id!!)
 
-                mUserDatabase!!.addValueEventListener(object: ValueEventListener{
+                mUserDatabase.addValueEventListener(object: ValueEventListener{
                         override fun onCancelled(p0: DatabaseError) {
                             Log.d("DBS ERROR","Error = ${p0.message}")
                         }
@@ -72,6 +69,7 @@ class ChatsAdaptor(private val list : ArrayList<FriendlyMessage>,
     override fun getItemCount() = list.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         holder.bindView(list[position])
    }
 }

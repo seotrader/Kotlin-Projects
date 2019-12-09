@@ -40,7 +40,7 @@ class UsersAdaptor(databaseQuerty : DatabaseReference,
             var options = arrayOf("Open Profile", "Send Message")
             var builder = AlertDialog.Builder(context)
                 .setTitle("Select Options")
-                .setItems(options, DialogInterface.OnClickListener { dialog, which ->
+                .setItems(options, DialogInterface.OnClickListener { _, which ->
                     var userName = holder.userNameTxt
                     var userStat = holder.userStatusTxt
                     var profilePic = holder.userProfilePicLink
