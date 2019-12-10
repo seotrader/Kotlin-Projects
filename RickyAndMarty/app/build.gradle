@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -14,6 +15,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
     buildTypes {
         release {
@@ -22,6 +29,13 @@ android {
         }
     }
 }
+
+def LifeCycleExtentionVersion = '1.1.1'
+def supportVersion = '28.0.0'
+def retrofitVersion = '2.3.0'
+def glideVersion = '4.9.0'
+def rxJavaVersion = '2.0.1'
+def room_version = "2.2.1"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -38,4 +52,22 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
     implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
+
+    implementation "com.android.support:recyclerview-v7:$supportVersion"
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+
+    implementation "android.arch.lifecycle:extensions:$LifeCycleExtentionVersion"
+
+    implementation "androidx.room:room-runtime:$room_version"
+
+    kapt "androidx.room:room-compiler:$room_version"
 }

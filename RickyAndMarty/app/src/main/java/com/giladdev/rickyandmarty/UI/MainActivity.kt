@@ -1,127 +1,139 @@
 package com.giladdev.rickyandmarty.UI
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.giladdev.rickyandmarty.R
-import com.giladdev.rickyandmarty.data.CharacterListAdaptor
-import com.giladdev.rickyandmarty.model.Character
-import com.giladdev.rickyandmarty.model.Api
 import com.giladdev.rickyandmarty.model.CharacterList
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import com.giladdev.rickyandmarty.viewmodel.ConnectionMode
+import com.giladdev.rickyandmarty.viewmodel.ListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.Retrofit
 
 class MainActivity : AppCompatActivity() {
 
-    private var characterslist : ArrayList<Character>?=null
-    private var myCompositeDisposable: CompositeDisposable? = null
-    private var adapter : CharacterListAdaptor?=null
-    private var layoutManager : RecyclerView.LayoutManager?=null
-    private val BASE_URL = "https://rickandmortyapi.com/api/"
+    lateinit var viewModel: ListViewModel
+    private var charAdapter =  CharacterListAdaptor(arrayListOf(),this)
+    lateinit var connectivityMgr : ConnectivityManager// ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    var isConnectedToInternet = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        characterslist = ArrayList<Character>()
-        adapter = CharacterListAdaptor(characterslist!!,this)
-        layoutManager = LinearLayoutManager(this)
-        myCompositeDisposable = CompositeDisposable()
+        errorTextView.visibility = View.GONE
+        listRecyclerView.visibility = View.VISIBLE
 
-        // set up the list , recycler view
-        RecyclerView.layoutManager = layoutManager
-        RecyclerView.adapter = adapter
+        viewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
+        viewModel.connMode = ConnectionMode.OFFLINE
+        viewModel.refresh()
+        charAdapter.connMode = viewModel.connMode
 
-        loadData()
+        // apply - Scope Functions
+        listRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = charAdapter
+
+        }
+        observeViewModel()
     }
 
-    fun loadData() {
+    override fun onResume() {
 
-        // create the Retrofit object
-        var retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        connectivityMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        observerConnectivity()
+        super.onResume()
+    }
+    fun observerConnectivity(){
+        var builder : NetworkRequest.Builder = NetworkRequest.Builder()
 
-
-        // gets the API class
-        var api = retrofit.create(Api::class.java)
-
-        var call : Call<CharacterList> = api.GetCharecters()
-
-        call.enqueue(object : Callback<CharacterList>{
-            override fun onFailure(call: Call<CharacterList>, t: Throwable) {
-                Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+        connectivityMgr.registerNetworkCallback(builder.build(),object : ConnectivityManager.NetworkCallback(){
+            override fun onLost(network: Network?) {
+                isConnectedToInternet = false
+                //record wi-fi disconnect event
+                Toast.makeText(getApplicationContext(), "NO INTERNET CONNECTION !!!!", Toast.LENGTH_LONG).show()
             }
+            override fun onUnavailable() {
+                isConnectedToInternet = false
+                Toast.makeText(getApplicationContext(), "NO INTERNET CONNECTION !!!!", Toast.LENGTH_LONG).show()
 
-            override fun onResponse(
-                call: Call<CharacterList>,
-                response: Response<CharacterList>
-            ) {
-                var Charecters : CharacterList? = response.body()
+            }
+            override fun onLosing(network: Network?, maxMsToLive: Int) {
+            }
+            override fun onAvailable(network: Network?) {
 
-                for (x in Charecters!!.characterList!!.toTypedArray())
-                {
-                    var newCharacter : Character? = Character(x.name,x.gender,x.image)
-                    if (newCharacter != null) {
-                        characterslist!!.add(newCharacter)
-                    }
-                adapter!!.notifyDataSetChanged()
+                isConnectedToInternet = true
+                Toast.makeText(getApplicationContext(), "YOU HAVE INTERNET CONNECTION :)", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId){
+            R.id.connection_mode -> {
+                Log.d("Connection Mode", "Connection Mode")
+                if (viewModel.loading.value == false)
+                    showConnectivityDialog()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    fun showConnectivityDialog()
+    {
+        val connectivityFreg = ConnectivityDialogFragment(this,viewModel.connMode)
+
+        connectivityFreg.conneMode.observe(this, Observer {connection ->
+            if (viewModel.connMode != connection){
+                viewModel.connMode = connection
+                charAdapter.connMode = connection
+                charAdapter.clear()
+                viewModel.refresh()
+            }
+        })
+        connectivityFreg.show(supportFragmentManager,"connectivity")
+
+
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.top_menu, menu)
+        return true
+    }
+
+    fun observeViewModel() {
+
+        charAdapter.lastLine.observe(this, Observer {isLastLine ->
+            isLastLine.let{
+                if ((it == true) && (viewModel.connMode == ConnectionMode.ONLINE)){
+                    viewModel.refreshMoreLines()
                 }
             }
-        } )
+        })
+        viewModel.countryLoadError.observe(this, Observer {isError ->
+            if (isError) View.VISIBLE else View.GONE
+        })
+        viewModel.characters.observe(this, androidx.lifecycle.Observer { characters: CharacterList? ->
+            characters?.let {
+                listRecyclerView.visibility = View.VISIBLE
+                charAdapter.updateCharacters(it)
+            }})
 
+        viewModel.loading.observe(this, Observer {isLoading ->
 
-
-
-//Build a Retrofit object//
-
-        /*val requestInterface = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//Get a usable Retrofit object by calling .build()//
-            .build().create(GetData::class.java)
-*/
-        /*
-//Add all RxJava disposables to a CompositeDisposable//
-            myCompositeDisposable?.add(requestInterface.getData()
-//Send the Observable’s notifications to the main UI thread//
-            .observeOn(AndroidSchedulers.mainThread())
-//Subscribe to the Observer away from the main UI thread//
-            .subscribeOn(Schedulers.io())
-            .subscribe(this::handleResponse))
-*/
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if (isLoading) errorTextView.visibility = View.GONE
+        })
     }
-
-
-    private fun handleResponse(characterList: List<Character>) {
-        characterslist = ArrayList(characterList)
-
-        adapter!!.notifyDataSetChanged()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-//Clear all your disposables//
-
-        myCompositeDisposable?.clear()
-
-    }
-
-
 }
-
-
-
