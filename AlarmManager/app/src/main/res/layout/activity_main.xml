@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/appPrimary"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/settingTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:text="Alarm Settings">
+
+
+    </TextView>
+        texts
+    <TextView
+        android:id="@+id/showTimeTV"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settingTV"
+        android:layout_width="match_parent"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="125dp"
+        android:text="Alarm is OFF"
+        android:textSize="25sp"/>
+
+    <Button
+        android:id="@+id/setTimeBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appSecondary"
+        android:layout_marginTop="25dp"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:onClick="buSetTime"
+        android:text="SET ALARM"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_below="@id/showTimeTV" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/appSecondary"
+            android:layout_below="@id/setTimeBtn"
+            android:elevation="100dp"
+            android:textColor="#fff"
+            android:layout_marginTop="25dp"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:text="Stop Alarm"
+            android:id="@+id/stopAlarmBtn"/>
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
