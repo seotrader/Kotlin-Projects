@@ -12,41 +12,61 @@
         android:layout_height="match_parent">
 
 
-        <TextView
-            android:id="@+id/settingTV"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textSize="25sp"
-            android:layout_marginTop="10dp"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:text="Alarm Settings">
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="45sp"
+            android:elevation="20dp"
+            android:layout_height="wrap_content">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/settingTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Alarm Settings"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold">
+                </TextView>
 
-        </TextView>
-        texts
+                <ImageView
+                    android:id="@+id/alarmImageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/alarmclock">
+
+                </ImageView>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
         <TextView
             android:id="@+id/showTimeTV"
             android:layout_height="wrap_content"
-            android:layout_below="@id/settingTV"
+            android:layout_below="@id/cardView"
             android:layout_width="match_parent"
             android:textStyle="bold"
             android:gravity="center_horizontal"
             android:textColor="@android:color/black"
-            android:layout_marginTop="25dp"
             android:text="Alarm is OFF"
-            android:textSize="25sp"/>
+            android:textSize="20sp"/>
 
         <Button
             android:id="@+id/setTimeBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/appSecondary"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:textColor="#fff"
             android:textStyle="bold"
-            android:textSize="22sp"
+            android:textSize="15sp"
             android:onClick="buSetTime"
             android:text="SET ALARM"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,9 +79,9 @@
             android:layout_below="@id/setTimeBtn"
             android:elevation="100dp"
             android:textColor="#fff"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:textStyle="bold"
-            android:textSize="22sp"
+            android:textSize="15sp"
             android:text="Stop Alarm"
             android:id="@+id/stopAlarmBtn"/>
 

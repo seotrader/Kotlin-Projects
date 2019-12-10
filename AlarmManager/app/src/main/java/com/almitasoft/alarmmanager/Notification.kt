@@ -3,7 +3,6 @@ package com.almitasoft.alarmmanager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -74,6 +73,18 @@ class Notification(var context: Context) {
                     100, 200, 300, 400, 500, 400, 300, 200, 400,
                     100, 200, 300, 400, 500, 400, 300, 200, 400,
                     100, 200, 300, 400, 500, 400, 300, 200, 400,
+                    100, 200, 300, 400, 500, 400, 300, 200, 400,
+                    100, 200, 300, 400, 500, 400, 300, 200, 400,
+                    100, 200, 300, 400, 500, 400, 300, 200, 400,
+                    100, 200, 300, 400, 500, 400, 300, 200, 400,
+                    100, 200, 300, 400, 500, 400, 300, 200, 400,
+                    100, 200, 300, 400, 500, 400, 300, 200, 400,
+                    100, 200, 300, 400, 500, 400, 300, 200, 400,
+                    100, 200, 300, 400, 500, 400, 300, 200, 400,
+                    100, 200, 300, 400, 500, 400, 300, 200, 400,
+                    100, 200, 300, 400, 500, 400, 300, 200, 400,
+                    100, 200, 300, 400, 500, 400, 300, 200, 400,
+                    100, 200, 300, 400, 500, 400, 300, 200, 400,
                     100, 200, 300, 400, 500, 400, 300, 200, 400)
                 setSound(alarmSound,att)
             }
@@ -94,16 +105,9 @@ class Notification(var context: Context) {
         }
     }
     fun Notify(context: Context,message:String,number:Int){
-        val intent=Intent(context,MainActivity::class.java)
 
         val alarmSound =
             RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-
-
-        val att = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-            .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-            .build()
 
         var collapesedView = RemoteViews(context.packageName, R.layout.notification_collapsed)
         var expandedView = RemoteViews(context.packageName, R.layout.notification_expanded)
@@ -126,16 +130,18 @@ class Notification(var context: Context) {
                 100, 200, 300, 400, 500, 400, 300, 200, 400,
                 100, 200, 300, 400, 500, 400, 300, 200, 400))
             .setSmallIcon(R.drawable.notification_icon_background)
-            //.setContentIntent(PendingIntent.getActivity(context
-              //  ,0,intent,PendingIntent.FLAG_UPDATE_CURRENT))
             .setAutoCancel(true)
 
         val nm=context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        var mNotification: Notification = builder.build()
+
+        mNotification.flags = Notification.FLAG_INSISTENT
+
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.ECLAIR) {
-            nm.notify(NOTIFIYTAG, 0, builder.build())
+            nm.notify(NOTIFIYTAG, 0,mNotification)
         }else{
-            nm.notify(NOTIFIYTAG.hashCode(), builder.build())
+            nm.notify(NOTIFIYTAG.hashCode(), mNotification)
         }
 
     }

@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (saveData.alarmMode == true){
-            showTimeTV.text= "Your Alarm Time: ${saveData.getHour()}:$min"
+            showTimeTV.text= "Alarm Set To: ${saveData.getHour()}:$min"
         } else{
             showTimeTV.text= "ALARM IS OFF"
         }
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             min = "0$min"
         }
 
-        showTimeTV.text= "Alarm Time: $hours:$min"
+        showTimeTV.text= "Alarm Set To: $hours:$min"
 
 
         appNotify.createNotificationChannel(this)

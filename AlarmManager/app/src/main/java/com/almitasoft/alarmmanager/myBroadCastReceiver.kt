@@ -11,12 +11,11 @@ class myBroadCastReceiver : BroadcastReceiver() {
 
         var b = intent!!.extras!!.get("message")
 
-        if (intent!!.action.equals("com.tester.alarmmanager")) {
-            val saveData = SaveData(context!!)
+        if (intent.action.equals("com.tester.alarmmanager")) {
             Toast.makeText(context," ${b.toString()}", Toast.LENGTH_LONG).show()
-            val notifyMe = Notification(context)
+            val notifyMe = Notification(context!!)
             notifyMe.Notify(context!!,b.toString(),10)
-        }else if (intent!!.action.equals("android.intent.action.BOOT_COMPLETED")){
+        }else if (intent.action.equals("android.intent.action.BOOT_COMPLETED")){
             val saveData = SaveData(context!!)
             saveData.setAlarm(saveData.getHour(),saveData.getMinute())
         }

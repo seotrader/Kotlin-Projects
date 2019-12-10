@@ -17,6 +17,7 @@ class SaveData {
     constructor(context: Context){
         this.context = context
         sharedRef = context.getSharedPreferences("myref", Context.MODE_PRIVATE)
+        alarmMode = sharedRef!!.getBoolean("mode", false)
     }
 
     fun turnOff(){
@@ -58,6 +59,9 @@ class SaveData {
         calendar.set(Calendar.MINUTE,getMinute())
         calendar.set(Calendar.SECOND,0)
 
+
+
+
         calendar.timeInMillis += snoozeTimeOut
 
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -89,11 +93,28 @@ class SaveData {
     fun setAlarm(hour: Int, minute: Int){
 
         val calendar = Calendar.getInstance()
+        var setForNextDay = false
+
+        if ( (hour<calendar.get(Calendar.HOUR_OF_DAY)) )
+            setForNextDay = true
+
+        if ( (hour==calendar.get(Calendar.HOUR_OF_DAY))
+            && minute<=calendar.get(Calendar.MINUTE)){
+            setForNextDay = true
+        }
 
         // only run on the current day
         calendar.set(Calendar.HOUR_OF_DAY,hour)
         calendar.set(Calendar.MINUTE,minute)
         calendar.set(Calendar.SECOND,0)
+
+        if (setForNextDay==true){
+            calendar.add(Calendar.DAY_OF_YEAR, 1)
+
+            if (calendar.get(Calendar.DAY_OF_YEAR)==365){
+                calendar.add(Calendar.YEAR, 1)
+            }
+        }
 
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
