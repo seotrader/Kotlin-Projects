@@ -3,6 +3,7 @@ package com.almitasoft.alarmmanager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -37,7 +38,7 @@ class Notification(var context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = NOTIFICATION_CHANNEL
             val descriptionText = "Alarm"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_HIGH
 
             // Register the channel with the system
             val notificationManager: NotificationManager =
@@ -112,25 +113,29 @@ class Notification(var context: Context) {
         var collapesedView = RemoteViews(context.packageName, R.layout.notification_collapsed)
         var expandedView = RemoteViews(context.packageName, R.layout.notification_expanded)
 
+        var closeIntent = Intent(context, myBroadCastReceiver::class.java)
+        closeIntent.action = "com.tester.close"
+        closeIntent.putExtra("message","Stop Alarm")
+
+        var closePendingIntent = PendingIntent.getBroadcast(context, 0,
+            closeIntent, 0)
+
+
+
         val builder=NotificationCompat.Builder(context,"alarm_channel_04")
             .setDefaults(Notification.DEFAULT_ALL)
             .setContentTitle("Alarm Notification")
-            .setCustomContentView(collapesedView)
-            .setCustomBigContentView(expandedView)
+            //.setCustomContentView(collapesedView)
+            //.setCustomBigContentView(expandedView)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setContentText(message)
             .setNumber(number)
-            .setSound(alarmSound)
-            .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400,
-                100, 200, 300, 400, 500, 400, 300, 200, 400,
-                100, 200, 300, 400, 500, 400, 300, 200, 400,
-                100, 200, 300, 400, 500, 400, 300, 200, 400,
-                100, 200, 300, 400, 500, 400, 300, 200, 400,
-                100, 200, 300, 400, 500, 400, 300, 200, 400,
-                100, 200, 300, 400, 500, 400, 300, 200, 400,
-                100, 200, 300, 400, 500, 400, 300, 200, 400))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .addAction(R.drawable.ic_launcher_background,
+               "Stop Alarm",
+                    closePendingIntent )
             .setSmallIcon(R.drawable.notification_icon_background)
-            .setAutoCancel(true)
+            .setAutoCancel(false)
 
         val nm=context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

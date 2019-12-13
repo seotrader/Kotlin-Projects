@@ -1,12 +1,8 @@
 package com.almitasoft.alarmmanager
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.View
-import com.almitasoft.alarmmanager.Notification
-import androidx.fragment.app.FragmentManager
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 

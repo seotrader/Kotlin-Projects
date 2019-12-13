@@ -25,7 +25,8 @@
             <intent-filter>
                 <action android:name="com.tester.alarmmanager" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-
+                <action android:name="com.tester.snooze" />
+                <action android:name="com.tester.close" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>

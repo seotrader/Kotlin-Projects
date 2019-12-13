@@ -77,6 +77,10 @@ class SaveData {
             AlarmManager.INTERVAL_DAY,pi)
     }
 
+    fun stopAlarm(){
+
+    }
+
     fun removeAlarm(){
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -119,8 +123,8 @@ class SaveData {
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         var intnet = Intent(context, myBroadCastReceiver::class.java)
-        intnet.putExtra("message","Alarm Time ${hour}:${minute}!!!")
         intnet.action = "com.tester.alarmmanager"
+        intnet.putExtra("message","Alarm Time ${hour}:${minute}!!!")
 
         val pi = PendingIntent.getBroadcast(context,1,
             intnet, PendingIntent.FLAG_UPDATE_CURRENT)
