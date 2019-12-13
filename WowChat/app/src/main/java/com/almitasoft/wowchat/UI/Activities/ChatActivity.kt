@@ -1,64 +1,50 @@
 package com.almitasoft.wowchat.UI.Activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.almitasoft.wowchat.models.FriendlyMessage
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.firebase.ui.database.SnapshotParser
-import com.almitasoft.wowchat.R
-import com.almitasoft.wowchat.models.FriendlyMessage
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.almitasoft.wowchat.R
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.custome_bar_image.view.*
 
+
 class ChatActivity : AppCompatActivity() {
 
     lateinit var userID : String
     lateinit var mFireBaseDatabaseRef: DatabaseReference
     lateinit var mFireBaseDataMessagesRef: DatabaseReference
+    private var userDataChangedEventListener : ValueEventListener?= null
     var mFireBaseUser : FirebaseUser?= null
 
     lateinit var mLinearLayoutManager : LinearLayoutManager
     lateinit var mFireBaseAdapter : FirebaseRecyclerAdapter<FriendlyMessage,MessageViewHolder>
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
         mFireBaseUser = FirebaseAuth.getInstance().currentUser
 
-        userID = intent.extras!!.getString("userId").toString()
-        var profileImgLink = intent.extras!!.get("profile").toString()
-        mLinearLayoutManager = LinearLayoutManager(this)
-        mLinearLayoutManager.stackFromEnd = true
+        loadChatWindowBar()
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        // enable to attach custome display
-        supportActionBar!!.setDisplayShowCustomEnabled(true)
-
-        var inflator = this.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE)
-                as LayoutInflater
-
-        var actionBarView = inflator.inflate(R.layout.custome_bar_image, null)
-
-        actionBarView.custom_bar_name.text = intent.extras!!.getString("name")
-
-        supportActionBar!!.customView = actionBarView
-
-        Picasso.get().load(profileImgLink)
-            .placeholder(R.drawable.profile_img)
-            .into(actionBarView.customBarCircleImage)
 
         mFireBaseDatabaseRef = FirebaseDatabase.getInstance().reference
         mFireBaseDataMessagesRef = FirebaseDatabase.getInstance().reference
@@ -163,7 +149,7 @@ class ChatActivity : AppCompatActivity() {
                 var mCurrentUserId = mFireBaseUser!!.uid
                 var currentUserDisplayName : String
 
-                mFireBaseDatabaseRef.child("Users")
+                userDataChangedEventListener =  mFireBaseDatabaseRef.child("Users")
                     .child(mCurrentUserId).addValueEventListener(object: ValueEventListener{
                         override fun onCancelled(p0: DatabaseError) {
                             Log.d("Firebase Error", p0.message)
@@ -172,25 +158,58 @@ class ChatActivity : AppCompatActivity() {
                         override fun onDataChange(snapShot: DataSnapshot) {
                             currentUserDisplayName = snapShot.child("display name").value.toString()
 
-                            var friendlyMessage = FriendlyMessage(mCurrentUserId,
-                                String().returnJoinString(userID,mCurrentUserId),
-                                messageEdt.text.toString().trim(),
-                                currentUserDisplayName.toString().trim(),
-                                targetUserDisplayName.toString().trim())
+                            if (!TextUtils.isEmpty(messageEdt.text.toString().trim())){
+                                var friendlyMessage = FriendlyMessage(mCurrentUserId,
+                                    String().returnJoinString(userID,mCurrentUserId),
+                                    messageEdt.text.toString().trim(),
+                                    currentUserDisplayName.toString().trim(),
+                                    targetUserDisplayName.toString().trim())
 
-                            mFireBaseDatabaseRef.child("messages").child(targetUserID.toString())
-                                .push().setValue(friendlyMessage)
+                                mFireBaseDatabaseRef.child("messages").child(targetUserID.toString())
+                                    .push().setValue(friendlyMessage)
 
-                            mFireBaseDatabaseRef.child("messages").child(mCurrentUserId.toString())
-                                .push().setValue(friendlyMessage)
+                                mFireBaseDatabaseRef.child("messages").child(mCurrentUserId.toString())
+                                    .push().setValue(friendlyMessage)
 
 
-                            messageEdt.setText("")
+                                messageEdt.setText("")
+
+                            }else{
+
+                            }
+
+
                         }
                     })
             }
         }
     }
+
+    fun loadChatWindowBar(){
+
+        userID = intent.extras!!.getString("userId").toString()
+        var profileImgLink = intent.extras!!.get("profile").toString()
+        mLinearLayoutManager = LinearLayoutManager(this)
+        mLinearLayoutManager.stackFromEnd = true
+
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        // enable to attach custome display
+        supportActionBar!!.setDisplayShowCustomEnabled(true)
+
+        var inflator = this.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE)
+                as LayoutInflater
+
+        var actionBarView = inflator.inflate(R.layout.custome_bar_image, null)
+
+        actionBarView.custom_bar_name.text = intent.extras!!.getString("name")
+
+        supportActionBar!!.customView = actionBarView
+        Picasso.get().load(profileImgLink)
+            .placeholder(R.drawable.profile_img)
+            .into(actionBarView.customBarCircleImage)
+
+    }
+
 
     fun String.returnJoinString(a : String, b : String) : String {
         if (a>b)
@@ -221,11 +240,17 @@ class ChatActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         mFireBaseAdapter.startListening()
+
     }
 
     override fun onStop() {
         super.onStop()
         mFireBaseAdapter.stopListening()
+    }
+
+    override fun onDestroy() {
+
+        super.onDestroy()
     }
 
 }

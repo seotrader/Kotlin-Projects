@@ -36,7 +36,7 @@ class ChatsFragment : Fragment() {
     }
 
     override fun onStop() {
-        chatsList.clear()
+        //chatsList.clear()
         super.onStop()
 
     }
@@ -67,6 +67,7 @@ class ChatsFragment : Fragment() {
                 override fun onDataChange(p0: DataSnapshot) {
                     var lastUserID : String = ""
 
+                    chatsList.clear()
                     p0.children.forEach {snapShort->
                         var dest_id = snapShort.child("dest_id").value.toString()
                         var from = snapShort.child("from").value.toString()

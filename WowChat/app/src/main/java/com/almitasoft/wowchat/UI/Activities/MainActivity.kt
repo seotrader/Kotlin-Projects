@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, DashBoardActivity::class.java))
             finish()
         }else{
-            Toast.makeText(this, "Not Signed In",Toast.LENGTH_LONG).show()
+            //Toast.makeText(this, "Not Signed In",Toast.LENGTH_LONG).show()
         }
         //}
     }
@@ -74,8 +74,8 @@ class MainActivity : AppCompatActivity() {
 
         } else {
             // Permission has already been granted
-            Toast.makeText(applicationContext, "Permission To Read Storage was already Granted",
-                Toast.LENGTH_LONG).show()
+//            Toast.makeText(applicationContext, "Permission To Read Storage was already Granted",
+//                Toast.LENGTH_LONG).show()
         }
 
     }

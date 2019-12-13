@@ -88,10 +88,6 @@ class DashBoardActivity : AppCompatActivity() {
         data?.let{
             var username = it.get("name")
 
-            supportActionBar?.run{
-                this.title = "Welcome $username"
-            }
-
             Toast.makeText(this, username.toString(), Toast.LENGTH_LONG)
                 .show()
         }

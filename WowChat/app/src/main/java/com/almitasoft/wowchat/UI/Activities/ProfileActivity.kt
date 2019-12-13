@@ -1,5 +1,6 @@
 package com.almitasoft.wowchat.UI.Activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.almitasoft.wowchat.R
@@ -14,6 +15,9 @@ class ProfileActivity : AppCompatActivity() {
     lateinit var mUsersDataBaseRef : DatabaseReference
     var mCurrentUser : FirebaseUser?= null
     lateinit var userId : String
+
+    var displayName: String?=null
+    var thumbImageUrl: String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -30,6 +34,14 @@ class ProfileActivity : AppCompatActivity() {
                 child(userId)
 
             setUpProfile()
+
+            sendMessageBTN.setOnClickListener {
+                var chatIntent = Intent(this, ChatActivity::class.java)
+                chatIntent.putExtra("userId", userId)
+                chatIntent.putExtra("name", displayName)
+                chatIntent.putExtra("profile", thumbImageUrl)
+                this.startActivity(chatIntent)
+            }
         }
     }
 
@@ -40,9 +52,10 @@ class ProfileActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(dataSnapShot: DataSnapshot) {
-                var displayName  = dataSnapShot.child("display name").value.toString()
+                displayName  = dataSnapShot.child("display name").value.toString()
                 var status = dataSnapShot.child("status").value.toString()
                 var image = dataSnapShot.child("image").value.toString()
+                thumbImageUrl = dataSnapShot.child("thumb_image").value.toString()
 
                 profileNameTV.text = displayName
                 profileStatusTV.text = status
