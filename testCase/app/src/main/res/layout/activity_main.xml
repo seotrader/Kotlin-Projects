@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_gravity="center"
+    android:layout_height="match_parent"
+    tools:context=".UI.MainActivity">
+
+    <TextView
+        android:id="@+id/header1TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="28sp"
+        android:layout_marginTop="36dp"
+        android:text="@string/mapsted"
+        android:textColor="#7B8D93"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/header2TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header1TV"
+        android:layout_centerHorizontal="true"
+        android:text="@string/myname"
+        android:textColor="#7B8D93"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="88dp" />
+
+    <TextView
+        android:id="@+id/header3TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header2TV"
+        android:layout_centerHorizontal="true"
+        android:text="@string/date"
+        android:textColor="#7B8D93"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="150dp" />
+
+    <TextView
+        android:id="@+id/purchasesCost"
+        android:layout_width="match_parent"
+        android:background="#A4EBF5"
+        android:textColor="#7B8D93"
+        android:textSize="16sp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="168dp"
+        android:text="@string/purchasesCost" />
+
+    <TextView
+        android:id="@+id/row1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/purchasesCost"
+        android:text="Manufactor"></TextView>
+
+
+    <Spinner
+        android:id="@+id/spinnerManufactor"
+        android:layout_toRightOf="@id/row1"
+        android:layout_alignParentLeft="true"
+        android:background="#CFD8DC"
+        android:layout_marginLeft="75dp"
+        android:layout_below="@id/purchasesCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:id="@+id/totalManufactor"
+        android:layout_toRightOf="@id/spinnerManufactor"
+        android:layout_below="@id/purchasesCost"
+        android:layout_marginLeft="15dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Manufactor"></TextView>
+
+    <TextView
+        android:id="@+id/row2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/row1"
+        android:text="Category"></TextView>
+
+    <Spinner
+        android:id="@+id/spinnerCategory"
+        android:layout_toRightOf="@id/row2"
+        android:layout_alignParentLeft="true"
+        android:background="#CFD8DC"
+        android:layout_marginLeft="75dp"
+        android:layout_below="@id/row1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:id="@+id/totalCategory"
+        android:layout_toRightOf="@id/spinnerCategory"
+        android:layout_below="@id/row1"
+        android:layout_marginLeft="15dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Category"></TextView>
+
+    <TextView
+        android:id="@+id/row3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/row2"
+        android:text="Country"></TextView>
+
+    <Spinner
+        android:id="@+id/spinnerCountry"
+        android:layout_toRightOf="@id/row3"
+        android:layout_alignParentLeft="true"
+        android:background="#CFD8DC"
+        android:layout_marginLeft="75dp"
+        android:layout_below="@id/row2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:id="@+id/totalCountry"
+        android:layout_toRightOf="@id/spinnerCountry"
+        android:layout_below="@id/row2"
+        android:layout_marginLeft="15dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Country"></TextView>
+
+    <TextView
+        android:id="@+id/row4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/row3"
+        android:text="State"></TextView>
+
+    <Spinner
+        android:id="@+id/spinnerState"
+        android:layout_toRightOf="@id/row4"
+        android:layout_alignParentLeft="true"
+        android:background="#CFD8DC"
+        android:layout_marginLeft="75dp"
+        android:layout_below="@id/row3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:id="@+id/totalState"
+        android:layout_toRightOf="@id/spinnerState"
+        android:layout_below="@id/row3"
+        android:layout_marginLeft="15dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Total State"></TextView>
+
+    <TextView
+        android:id="@+id/numberofPurchses"
+        android:layout_width="match_parent"
+        android:layout_below="@id/row4"
+        android:layout_marginTop="20dp"
+        android:background="#A4EBF5"
+        android:textColor="#7B8D93"
+        android:textSize="16sp"
+        android:layout_height="wrap_content"
+        android:text="Number of purchases" />
+
+
+    <TextView
+        android:id="@+id/row5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/numberofPurchses"
+        android:text="Item:"></TextView>
+
+    <Spinner
+        android:id="@+id/spinnerItemID"
+        android:layout_toRightOf="@id/row5"
+        android:layout_alignParentLeft="true"
+        android:background="#CFD8DC"
+        android:layout_marginLeft="75dp"
+        android:layout_below="@id/numberofPurchses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:id="@+id/totalItemID"
+        android:layout_toRightOf="@id/spinnerItemID"
+        android:layout_below="@id/numberofPurchses"
+        android:layout_marginLeft="15dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Items"></TextView>
+
+    <TextView
+        android:id="@+id/MostTotalPurchase"
+        android:layout_width="match_parent"
+        android:layout_below="@id/row5"
+        android:layout_marginTop="20dp"
+        android:background="#A4EBF5"
+        android:textColor="#7B8D93"
+        android:textSize="16sp"
+        android:layout_height="wrap_content"
+        android:text="Most Total Purchase" />
+
+    <TextView
+        android:id="@+id/buildingMostPurchase"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/MostTotalPurchase"
+        android:layout_marginTop="20dp"
+        android:textColor="#7B8D93"
+        android:textSize="16sp"
+        android:layout_height="wrap_content"
+            android:text="Building:" />
+
+    <TextView
+        android:id="@+id/buildingName"
+        android:layout_width="match_parent"
+        android:layout_below="@id/MostTotalPurchase"
+        android:layout_toRightOf="@id/buildingMostPurchase"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="75dp"
+        android:textColor="#7B8D93"
+        android:textSize="16sp"
+        android:layout_height="wrap_content"
+        android:text="Building Name" />
+
+
+
+
+</RelativeLayout>
