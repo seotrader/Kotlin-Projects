@@ -7,6 +7,8 @@ This is a complete Firebase cloud multi-user chat app, it allows you to do the f
 - Change profile pictures and status
 - Send messages to different users and chat
 
+## Playsore Link
+https://play.google.com/store/apps/details?id=com.almitasoft.wowchat
 
 ## Screenshots of the app
 
