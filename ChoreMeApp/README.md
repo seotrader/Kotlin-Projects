@@ -13,3 +13,4 @@ Multi-User Chores App, Run on the Cloub with Firebase
 
 * MVVM
 * Koin
+* Dependency Injection
