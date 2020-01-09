@@ -4,7 +4,7 @@ Multi-User Chores App, Run on the Cloub with Firebase
 
 # Technologies Stack
 
-* Androind
+* Android
 * Kotlin
 * FireBase
 
