@@ -1,4 +1,4 @@
-## Chore Me App - Under Development !
+## Chore Me App - Under Development ! First Version End of January 2020
 
 Multi-User Chores App, Run on the Cloub with Firebase
 
@@ -9,7 +9,7 @@ Multi-User Chores App, Run on the Cloub with Firebase
 * FireBase
 
 
-Architecture 
+# Architecture 
 
 * MVVM
 * Koin
