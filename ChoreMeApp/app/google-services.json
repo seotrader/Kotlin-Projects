@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "967869045119",
+    "firebase_url": "https://choremeapp.firebaseio.com",
+    "project_id": "choremeapp",
+    "storage_bucket": "choremeapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967869045119:android:3f5cbb9c0a0bfca2a8624a",
+        "android_client_info": {
+          "package_name": "com.giladdev.choremeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "967869045119-4ea7q0sel42i1ri8lbuhj028co5vuui0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.giladdev.choremeapp",
+            "certificate_hash": "7b128b1cdcc000ff01cd706dcc6d0b14694caa76"
+          }
+        },
+        {
+          "client_id": "967869045119-qqkub11mrlbs7slgmshujggo4ghq5obj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyDAPCLhdjY52oCg4744kNU2LKqZNvJeM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "967869045119-qqkub11mrlbs7slgmshujggo4ghq5obj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

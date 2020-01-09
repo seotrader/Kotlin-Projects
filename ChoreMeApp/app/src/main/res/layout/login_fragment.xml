@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.login.LoginFragment">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="400dp"
+            android:layout_centerInParent="true"
+            android:background="@android:color/white"
+            android:layout_height="400dp"
+            app:cardCornerRadius="13dp"
+            android:elevation="12dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/mediumPadding"
+                android:layout_marginTop="50dp"
+                android:text="@string/loginText"
+                android:textColor="#fff"
+                android:textSize="@dimen/MediumTextSize"
+                android:textStyle="bold"/>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp">
+
+                <EditText
+                    android:id="@+id/emailEditBoxLA"
+                    android:hint="Enter Email"
+                    android:padding="10dp"
+                    android:inputType="textEmailAddress"
+                    android:layout_width="match_parent"
+                    android:textCursorDrawable="@drawable/bg_input_cursor_2"
+                    android:background="@drawable/selector_bg_edit_2"
+                    android:textSize="@dimen/loginTextSize"
+                    android:layout_height="wrap_content">
+                </EditText>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/loginpasswordEditBoxLA"
+                    android:layout_marginTop="15dp"
+                    android:padding="10dp"
+                    android:textColor="#f0f7f4"
+                    android:background="@drawable/selector_bg_edit_2"
+                    android:textCursorDrawable="@drawable/bg_input_cursor_2"
+                    android:hint="Enter Password"
+                    android:inputType="textPassword"
+                    android:textSize="@dimen/loginTextSize">
+                </EditText>
+                    <Button
+                        android:layout_width="150dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="@dimen/mediumPadding"
+                        android:stateListAnimator="@drawable/state_list_animator_z"
+                        android:layout_gravity="center"
+                        android:text="LOGIN"
+                        android:textColor="#d3d3d3"
+                        android:id="@+id/loginButtonLA"
+                        android:background="@drawable/bt_shape">
+                    </Button>
+
+                    <TextView
+                        android:id="@+id/forgotPasswordText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/mediumPadding"
+                        android:text="@string/forgotPasswordText"
+                        android:textSize="@dimen/loginTextSize"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+</FrameLayout>

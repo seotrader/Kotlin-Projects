@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/grey_100"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/smallPadding">
+
+    <androidx.cardview.widget.CardView
+        android:elevation="@dimen/Elevation"
+        app:cardCornerRadius="@dimen/Corner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ImageView
+                android:id="@+id/IVUser"
+                android:layout_width="@dimen/SmallImage"
+                android:layout_height="@dimen/SmallImage"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="@dimen/smallPadding"
+                android:contentDescription="@string/userImage"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tvDisplayName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/smallPadding"
+                android:layout_centerInParent="true"
+                android:layout_below="@id/btnFriendRequest"
+                android:layout_toRightOf="@id/IVUser"
+                android:text="@string/displayName"
+                android:textSize="@dimen/SmallTextSize" />
+
+            <Button
+                android:id="@+id/btnFriendRequest"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/smallPadding"
+                android:textSize="@dimen/TinyTextSize"
+                android:layout_toRightOf="@id/IVUser"
+                android:text="Send Friend Request" />
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</LinearLayout>

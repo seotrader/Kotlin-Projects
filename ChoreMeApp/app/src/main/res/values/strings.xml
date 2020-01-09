@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">ChoreMeApp</string>
+    <string name="my_tasks">My Tasks</string>
+    <string name="my_friends">My Friends</string>
+    <string name="title_friends">Your Tasks Friends</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="loginText">Login</string>
+    <string name="forgotPasswordText"><u>Forgot Password?</u></string>
+    <string name="welcome_text">Welcome to ChoreMe App</string>
+    <string name="Login">Login</string>
+    <string name="CreateAct">Create a New Account</string>
+    <string name="AddUsers">Add New Users</string>
+    <string name="logout">Log Out</string>
+    <string name="userImage">userImage</string>
+    <string name="displayName">Display Name</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="friend_request">You Have a New Friend Request</string>
+    <string name="Approve">Approve?</string>
+    <string name="new_task_notification">You Have a New Task From</string>
+
+</resources>

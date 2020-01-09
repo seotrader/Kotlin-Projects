@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_dashboard">
+
+    <fragment
+        android:id="@+id/login_screen"
+        android:name="com.almitasoft.choremeapp.ui.login.LoginFragment"
+        android:label="Login To ChoreMe"
+        tools:layout="@layout/login_fragment"/>
+
+    <fragment
+        android:id="@+id/searchUserFragment"
+        android:name="com.almitasoft.choremeapp.ui.addusers.SearchUsers"
+        android:label="Search Users"
+        tools:layout="@layout/search_users_fragment" />
+
+    <fragment
+        android:id="@+id/welcome_screen"
+        android:name="com.almitasoft.choremeapp.ui.login.WelcomeFragment"
+        android:label="Welcome To Choreme App"
+        tools:layout="@layout/welcome_fragment" />
+
+    <fragment
+        android:id="@+id/create_new_account"
+        android:name="com.almitasoft.choremeapp.ui.login.CreateNewAccountFragment"
+        android:label="Create New Account"
+        tools:layout="@layout/create_new_account_fragment" />
+
+
+    <fragment
+        android:id="@+id/navigation_friends"
+        android:name="com.almitasoft.choremeapp.ui.Friends.MyFriendsFragment"
+        android:label="@string/title_friends"
+        tools:layout="@layout/fragment_friends" />
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.almitasoft.choremeapp.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.almitasoft.choremeapp.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+</navigation>
