@@ -1,10 +1,19 @@
 package com.almitasoft.choremeapp.model
 
-abstract class Notification (var notificationType : Int,
-                             var notificationMessage: String) {
+enum class NotificationType{
+    ADDFRIEND,
+    ADDTASK,
+    GENERALNOTIFICATION
+}
+abstract class Notification (var notificationType : NotificationType,
+                             var notificationMessage: String,
+                             var notificationID: String) {
+
+
 }
 
-class AddFriendNotification( notificationMessage: String) : Notification(0,notificationMessage)
+class AddFriendNotification( notificationMessage: String, notificationID: String)
+    : Notification(NotificationType.ADDFRIEND,notificationMessage,notificationID)
 {
     var sourceUID : String=""
     var sourceUName : String=""
@@ -13,7 +22,8 @@ class AddFriendNotification( notificationMessage: String) : Notification(0,notif
     var status: String=""
 }
 
-class AddTaskNotification( notificationMessage: String) : Notification(1,notificationMessage)
+class AddTaskNotification( notificationMessage: String,notificationID: String) :
+    Notification(NotificationType.ADDTASK,notificationMessage,notificationID)
 {
     var sourceUID : String=""
     var sourceUName : String=""

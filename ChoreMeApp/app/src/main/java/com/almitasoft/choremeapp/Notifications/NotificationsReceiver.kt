@@ -5,9 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.almitasoft.choremeapp.ui.MainActivity
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
+
 
 class NotificationsReceiver : BroadcastReceiver(), KoinComponent{
     private val notificationService :  NotificationSender by inject { parametersOf(this) }
@@ -19,6 +21,15 @@ class NotificationsReceiver : BroadcastReceiver(), KoinComponent{
             Log.d("Close Broadcast","Close event received in service")
             notificationService.removeNotificationChannel()
             notificationService.createNotificationChannel()
+        }
+
+        if (intent.action.equals("com.tester.open")){
+            //start activity
+            //start activity
+            val i = Intent()
+            i.setClassName(context!!.packageName, MainActivity::class.java.name)
+            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(i)
         }
     }
 }

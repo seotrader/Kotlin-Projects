@@ -2,6 +2,7 @@ package com.almitasoft.choremeapp.ui
 
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SearchView
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -18,7 +20,9 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import androidx.navigation.ui.navigateUp
 import com.almitasoft.choremeapp.Notifications.NotificationSender
 import com.almitasoft.choremeapp.R
+import com.almitasoft.choremeapp.data.FireBaseManager
 import com.almitasoft.choremeapp.di.appModule
+import com.almitasoft.choremeapp.model.NotificationType
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +33,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 
 
@@ -37,8 +42,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: SharedViewModel
     lateinit var navController : NavController
     lateinit var appBarConfiguration : AppBarConfiguration
-    private val notificationService :  NotificationSender by inject { parametersOf(this) }
-
+    private val notificationService :  NotificationSender by inject { parametersOf(
+        this) }
 
     init{
         stopKoin()
@@ -88,9 +93,36 @@ class MainActivity : AppCompatActivity() {
 
         setNotificationChannel()
 
+
+        observeNotifications()
+
         printWindowSize()
     }
 
+    fun observeNotifications(){
+        viewModel.getBroadCastNotifications().observe(this, Observer {
+            it.forEach {notification->
+                when (notification.notificationType) {
+                    NotificationType.ADDFRIEND -> {
+                        notificationService.Notify(notification.notificationMessage,0)
+                    }
+                    NotificationType.GENERALNOTIFICATION -> {
+
+                    }
+                    NotificationType.ADDTASK -> {
+                    }
+                }
+            }
+            viewModel.deleteBroadCastNotification().observe(this, Observer {result->
+                if (result.result=="OK"){
+                    Log.d("MainActivity:observeNotification","OK")
+                }else{
+                    Log.d("MainActivity:observeNotification","ERROR = ${result.result}")
+                }
+
+            })
+        })
+    }
     fun printWindowSize(){
         val display = windowManager.defaultDisplay
         val outMetrics = DisplayMetrics()
@@ -102,13 +134,15 @@ class MainActivity : AppCompatActivity() {
 
         Toast.makeText(this, "Height = $dpHeight, width=$dpWidth", Toast.LENGTH_LONG).show()
     }
+
+    fun getNotification(){
+
+    }
     fun setNotificationChannel(){
 
         notificationService.removeNotificationChannel()
         notificationService.createNotificationChannel()
         notificationService.Notify("New Friend Notification",1)
-
-
     }
 
     override fun onBackPressed() {
@@ -130,7 +164,7 @@ class MainActivity : AppCompatActivity() {
 
         var searchItem = menu!!.findItem(R.id.search_btn)
         var searchView = searchItem.actionView as SearchView
-        searchView.queryHint = "Search Name Or Email"
+        searchView.queryHint = "Search Terms/Title/Genre"
 
 
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
@@ -167,6 +201,11 @@ class MainActivity : AppCompatActivity() {
     override fun onResume(){
         viewModel.mainActivity.value = this
         super.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopKoin()
     }
 }
 

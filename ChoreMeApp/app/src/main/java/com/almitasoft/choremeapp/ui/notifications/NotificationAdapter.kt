@@ -12,7 +12,9 @@ import com.almitasoft.choremeapp.model.AddFriendNotification
 import com.almitasoft.choremeapp.model.Notification
 import com.almitasoft.choremeapp.model.User
 
-class NotificationAdapter(var notificationList:ArrayList<Notification>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class NotificationAdapter(
+    var notificationList: kotlin.collections.ArrayList<Notification>,
+    val notificationsFragment: NotificationsFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun getItemViewType(position: Int): Int {
 
@@ -46,15 +48,24 @@ class NotificationAdapter(var notificationList:ArrayList<Notification>) : Recycl
 
     inner class FriendAddedViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         fun bindItem(friendNotification: AddFriendNotification){
-            var tvUserAdded = itemView.findViewById<TextView>(R.id.tvUserAdded)
-            var btnApprove = itemView.findViewById<Button>(R.id.btnApprove)
-            var btnReject = itemView.findViewById<Button>(R.id.btnReject)
+            val tvUserAdded = itemView.findViewById<TextView>(R.id.tvUserAdded)
+            val btnApprove = itemView.findViewById<Button>(R.id.btnApprove)
+            val btnReject = itemView.findViewById<Button>(R.id.btnReject)
 
-            var image = itemView.findViewById<ImageView>(R.id.IVFriend)
+            val image = itemView.findViewById<ImageView>(R.id.IVFriend)
 
             image.setImageResource(R.drawable.default_avata)
 
             tvUserAdded.text = friendNotification.notificationMessage
+
+            btnApprove.setOnClickListener {
+                notificationsFragment.addFriend(friendNotification)
+            }
+
+            btnReject.setOnClickListener {
+                val user = User(friendNotification.sourceUName,friendNotification.sourceUID)
+                notificationsFragment.deleteFriend(user,friendNotification)
+            }
         }
     }
 

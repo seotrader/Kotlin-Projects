@@ -1,23 +1,43 @@
 package com.almitasoft.choremeapp.ui.notifications
 
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.almitasoft.choremeapp.data.FireBaseManager
-import com.almitasoft.choremeapp.model.AddFriendNotification
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import com.almitasoft.choremeapp.data.FireBaseInterface
+import com.almitasoft.choremeapp.model.GetUserDataResult
+import com.almitasoft.choremeapp.model.Notification
+import com.almitasoft.choremeapp.model.User
+import io.reactivex.disposables.CompositeDisposable
 
-class NotificationsViewModel : ViewModel() , KoinComponent{
+class NotificationsViewModel(var fb : FireBaseInterface) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+    val notificationList = MutableLiveData<ArrayList<Notification>>()
+    private val deleteFriendStatus = MutableLiveData<GetUserDataResult>()
+
+    private val disposable = CompositeDisposable()
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable.dispose()
     }
-    val text: LiveData<String> = _text
 
-    private val fb : FireBaseManager by inject()
+    fun deleteFriend(user : User) : LiveData<GetUserDataResult>{
+        disposable.add(
+            fb.deleteFriend(user).subscribe{
+                deleteFriendStatus.value = it as GetUserDataResult
+            }
+        )
+        return deleteFriendStatus
+    }
 
-    fun getUsersList() : LiveData<ArrayList<AddFriendNotification>> {
-        return fb.getNotifications()
+    fun refreshData()
+    {
+        disposable.add(
+            fb.getNotifications2().subscribe {
+                val tempArray = ArrayList<Notification>()
+                tempArray.addAll(it)
+                notificationList.value = tempArray}
+        )
     }
 }

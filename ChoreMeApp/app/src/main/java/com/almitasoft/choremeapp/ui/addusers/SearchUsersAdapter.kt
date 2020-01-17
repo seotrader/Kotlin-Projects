@@ -17,7 +17,7 @@ class SearchUsersAdapter(var usersList:ArrayList<User>,
 
     var usersFilter = object:Filter(){
         override fun performFiltering(constraint: CharSequence?): FilterResults {
-            var filteredUsersList = arrayListOf<User>()
+                var filteredUsersList = arrayListOf<User>()
 
             if (constraint == null || constraint.length==0)
                 filteredUsersList.addAll(savedFullUserList)
@@ -33,10 +33,10 @@ class SearchUsersAdapter(var usersList:ArrayList<User>,
                 filteredUsersList.addAll(filteredList)
             }
 
-            var results = FilterResults()
-
-            results.values = filteredUsersList
-            return results
+                var results = FilterResults()
+    
+                results.values = filteredUsersList
+                return results
         }
 
 

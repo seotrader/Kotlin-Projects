@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MoviesListApp</string>
+    <string name="hintText">Search Term/Title/Genre</string>
+    <string name="ErrorTest">This is an Error</string>
+    <string name="title">TITLE</string>
+    <string name="YEAR">YEAR</string>
+    <string name="GENRE">GENRE</string>
+    <string name="DESCRIPTION">DESCRIPTION</string>
+</resources>

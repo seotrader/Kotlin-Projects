@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/smallpadding">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="150dp"
+        android:elevation="@dimen/smallElevation"
+       app:cardCornerRadius="10sp"
+        app:cardBackgroundColor="@android:color/holo_orange_light"
+        android:layout_height="170dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/IVMovie"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="@string/DESCRIPTION"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/TVMovieTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/tinypadding"
+            android:layout_below="@id/IVMovie"
+            android:contentDescription="@string/DESCRIPTION"
+            android:text="@string/title"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/TVGenre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginStart="@dimen/tinypadding"
+            android:layout_below="@id/TVMovieTitle"
+            android:text="@string/GENRE" />
+
+        <TextView
+            android:id="@+id/TVMovieYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginStart="@dimen/tinypadding"
+            android:layout_marginLeft="@dimen/smallpadding"
+            android:layout_below="@+id/TVMovieTitle"
+            android:layout_toEndOf="@id/TVGenre"
+            android:text="@string/YEAR" />
+
+    </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

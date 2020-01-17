@@ -107,19 +107,17 @@ class NotificationSender(var context:Context) {
     }
     fun Notify(message:String,number:Int){
 
-        val alarmSound =
-            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-
         var closeIntent = Intent(context, NotificationsReceiver::class.java)
         closeIntent.action = "com.tester.close"
         closeIntent.putExtra("message","Friend Notification")
 
-
-
         var closePendingIntent = PendingIntent.getBroadcast(context, 0,
             closeIntent, 0)
 
-
+        var openAppIntent = Intent(context, NotificationsReceiver::class.java)
+        openAppIntent.action = "com.tester.open"
+        var openPendingIntent = PendingIntent.getBroadcast(context, 0,
+            openAppIntent, 0)
 
         val builder= NotificationCompat.Builder(context,NOTIFICATION_CHANNEL)
             .setDefaults(Notification.DEFAULT_ALL)
@@ -132,13 +130,19 @@ class NotificationSender(var context:Context) {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .addAction(
                 R.drawable.ic_launcher_background,
-                "Stop Alarm",
+                "Close",
                 closePendingIntent )
-            .setSmallIcon(R.drawable.default_avata)
+            .addAction(
+                R.drawable.ic_launcher_background,
+                "Goto App",
+                openPendingIntent )
+            .setSmallIcon(R.drawable.ic_minus_white)
+
             .setLargeIcon(
                 BitmapFactory.decodeResource(context.getResources(),
-                R.mipmap.ic_launcher))
+                R.drawable.default_avata))
             .setAutoCancel(true)
+            .setColor( ContextCompat.getColor(context, R.color.colorPrimary))
 
         val nm=context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

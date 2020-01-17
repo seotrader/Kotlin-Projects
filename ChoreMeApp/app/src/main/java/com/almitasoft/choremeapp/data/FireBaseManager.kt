@@ -3,28 +3,223 @@ package com.almitasoft.choremeapp.data
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.almitasoft.choremeapp.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
-class FireBaseManager {
+class FireBaseManager : FireBaseInterface {
+
     lateinit var mDataBase : DatabaseReference
     var mCurrentUser : FirebaseUser?=null
     var addFriendRequestResult = MutableLiveData<Result>()
     var notificationsList = MutableLiveData<ArrayList<AddFriendNotification>>()
-    var addNotificationResult = MutableLiveData<Result>()
-
     var currentUserDataResult = MutableLiveData<Result>()
+    var broadCastNotificationList = MutableLiveData<ArrayList<Notification>>()
+    var deletenotificationsResult = MutableLiveData<Result>()
+    var addFriendResult = MutableLiveData<Result>()
+    var requestedTargetUser = MutableLiveData<User>()
+    var requestDeleteFriend = MutableLiveData<Result>()
 
-    fun addFriendNotification(notification : AddFriendNotification) : LiveData<Result>
+
+    override fun deleteNotification(notification: Notification): Observable<Result> {
+        return Observable.create(ObservableOnSubscribe<Result>{emitter->
+            var result = GetUserDataResult("OK")
+
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+            mDataBase = FirebaseDatabase.getInstance().reference.child("Friends")
+                .child(mCurrentUser!!.uid).child(notification.notificationID)
+
+            mDataBase.removeValue().addOnCompleteListener {task->
+                if (task.isSuccessful){
+                    emitter.onNext(result)
+                }
+                else{
+                    Log.d("Error getNotifications()","Error = ${task.result.toString()}")
+                    emitter.onError(Throwable(task.result.toString()))
+                }
+            }
+        }
+        )
+
+    }
+
+    override fun getTargetUserData(userID: String) : LiveData<User>{
+
+        mCurrentUser =  FirebaseAuth.getInstance().currentUser
+        var result = GetUserDataResult("OK")
+
+        mDataBase = FirebaseDatabase.getInstance().reference.child("Users")
+            .child(userID)
+
+        mDataBase.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                requestedTargetUser.value = null
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                val displayName = p0.child("display name").value.toString()
+                val userEmail = p0.child("email").value.toString()
+                val status = p0.child("status").value.toString()
+                val image_url = p0.child("image").value.toString()
+                val thumb_image_url = p0.child("thumb_image").value.toString()
+
+                var user = User(displayName, userID)
+                user.userEmail = userEmail
+                user.status = status
+                user.image_url = image_url
+                user.thumb_image_url = thumb_image_url
+                requestedTargetUser.value = user
+            }
+        })
+        return requestedTargetUser
+    }
+
+
+    override fun addToFriends(user : User) : LiveData<Result>{
+        var userObj = hashMapOf<String,String>()
+
+        mDataBase = FirebaseDatabase.getInstance().reference.child("Friends").
+            child(CurrentUser.userID!!).child(user.userID)
+
+        var addUserResult = AddFriendResult("OK")
+
+        userObj.put("userid", user.userID)
+        userObj.put("displayname", user.displayName)
+        userObj.put("imageurl", user.image_url!!)
+        userObj.put("thumbimageurl", user.thumb_image_url!!)
+        userObj.put("status", user.status!!)
+
+
+        mDataBase.setValue(userObj).addOnCompleteListener {task->
+            if (task.isSuccessful) {
+                mDataBase = FirebaseDatabase.getInstance().reference.child("Friends").
+                    child(user.userID).child(CurrentUser.userID!!)
+
+                userObj.clear()
+
+                userObj.put("userid", CurrentUser.userID!!)
+                userObj.put("displayname", CurrentUser.displanyName!!)
+                userObj.put("imageurl", CurrentUser.image_url!!)
+                userObj.put("thumbimageurl", CurrentUser.thumb_image_url!!)
+                userObj.put("status", CurrentUser.status!!)
+
+                mDataBase.setValue(userObj).addOnCompleteListener { task2 ->
+                    if (task2.isSuccessful){
+                        addUserResult.result = "OK"
+                        addFriendResult.value = addUserResult
+                    }
+                    else{
+                        addUserResult.result = "ERROR = ${task.result.toString()}"
+
+                        addFriendResult.value = addUserResult
+                    }
+                }
+
+
+            }
+            else{
+                addUserResult.result = "ERROR = ${task.result.toString()}"
+
+                addFriendResult.value = addUserResult
+            }
+        }
+
+        return addFriendResult
+
+    }
+
+    override fun deleteFriendRequest(notification: AddFriendNotification) : Observable<Result>{
+        // TODO: implement it
+        return Observable.create(ObservableOnSubscribe<Result>{
+            var result = AddFriendResult("OK")
+            it.onNext(result)
+        })
+    }
+
+    override fun deleteBroadCastotifications() : LiveData<Result>{
+
+        var result = GetUserDataResult("OK")
+
+        mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+        mDataBase = FirebaseDatabase.getInstance().reference.child("Notifications")
+            .child(mCurrentUser!!.uid)
+
+        mDataBase.removeValue().addOnCompleteListener {task->
+            if (task.isSuccessful){
+                deletenotificationsResult.value = result
+            }
+            else{
+                result.res = "ERROR = ${task.result.toString()}"
+            }
+        }
+        return deletenotificationsResult
+    }
+
+    override fun getBroadCaseNotifications() : LiveData<ArrayList<Notification>>{
+        var tempList = arrayListOf<Notification>()
+
+        mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+        mDataBase = FirebaseDatabase.getInstance().reference.child("Notifications")
+            .child(mCurrentUser!!.uid)
+
+        mDataBase.addValueEventListener(object: ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d("FirebaseManager:getBroadCaseNotifications","Error = ${p0.message}")
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                p0.children.forEach {snapshot->
+                    var message = snapshot.child("Message").value.toString()
+                    var notificationType = snapshot.child("NotificationType").value.toString()
+                    var source_UName = snapshot.child("Source_UName").value.toString()
+                    var uID = snapshot.child("UID").value.toString()
+                    var status = snapshot.child("Status").value.toString()
+                    var target_UID = snapshot.child("Target_UName").value.toString()
+                    var target_UName = snapshot.child("Target_UID").value.toString()
+
+                    when (notificationType){
+                        "ADDFRIEND"->{
+                            var addFriendNotification = AddFriendNotification(message,"EMPTY")
+                            addFriendNotification.sourceUName = source_UName
+                            addFriendNotification.targetUName = target_UName
+                            addFriendNotification.targetUID = target_UID
+                            addFriendNotification.sourceUID = uID
+                            addFriendNotification.status = status
+
+                            tempList.add(addFriendNotification)
+
+                        }
+
+                    }
+
+                }
+                broadCastNotificationList.value = tempList
+            }
+        })
+
+        return broadCastNotificationList
+    }
+
+    override fun addFriendNotification(notification : AddFriendNotification) : LiveData<Result>
     {
         var userObj = hashMapOf<String,String>()
 
         mDataBase = FirebaseDatabase.getInstance().reference.child("Notifications").
-            child(CurrentUser.userID!!).push()
+            child(notification.targetUID).push()
 
+        mDataBase.key?.let {
+            userObj.put("NotificationID",it)
+        }
+
+        userObj.put("NotificationType", notification.notificationType.toString())
         userObj.put("UID", notification.sourceUID)
         userObj.put("Source_UName", notification.sourceUName)
         userObj.put("Target_UID", notification.targetUID)
@@ -49,7 +244,7 @@ class FireBaseManager {
         return addFriendRequestResult
 
     }
-    fun getCurrentUserData() : LiveData<Result>{
+    override fun getCurrentUserData() : LiveData<Result>{
         mCurrentUser =  FirebaseAuth.getInstance().currentUser
         var result = GetUserDataResult("OK")
 
@@ -80,7 +275,7 @@ class FireBaseManager {
         return currentUserDataResult
     }
 
-    fun addFriendRequest(user : User) : LiveData<Result>{
+    override fun addFriendRequest(user : User) : LiveData<Result>{
 
         var userObj = hashMapOf<String,String>()
 
@@ -122,7 +317,7 @@ class FireBaseManager {
         return addFriendRequestResult
     }
 
-    fun getNotifications() : LiveData<ArrayList<AddFriendNotification>>{
+    override fun getNotifications() : LiveData<ArrayList<AddFriendNotification>>{
         mCurrentUser =  FirebaseAuth.getInstance().currentUser
 
         mDataBase = FirebaseDatabase.getInstance().reference.child("FriendsRequests")
@@ -143,7 +338,7 @@ class FireBaseManager {
                     var status = snapshot.child("status").value.toString()
 
                     if (targetUID == CurrentUser.userID){
-                        var newFriendNotification = AddFriendNotification("New Friend Request From: ${sourceUname}")
+                        var newFriendNotification = AddFriendNotification("New Friend Request From: ${sourceUname}","EMPTY")
                         newFriendNotification.sourceUID = sourceUID
                         newFriendNotification.status = status
                         newFriendNotification.targetUID = targetUID
@@ -159,6 +354,112 @@ class FireBaseManager {
         })
 
         return notificationsList
+    }
+
+    override fun deleteFriend(user : User) : Observable<Result>{
+        return Observable.create(ObservableOnSubscribe<Result>{emitter->
+            var result = GetUserDataResult("OK")
+
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+            mDataBase = FirebaseDatabase.getInstance().reference.child("Friends")
+                .child(mCurrentUser!!.uid).child(user.userID)
+
+            mDataBase.removeValue().addOnCompleteListener {task->
+                if (task.isSuccessful){
+                    emitter.onNext(result)
+                }
+                else{
+                    Log.d("Error getNotifications()","Error = ${task.result.toString()}")
+                    emitter.onError(Throwable(task.result.toString()))
+                }
+            }
+        }
+        )
+
+    }
+
+    override fun getNotifications2() : Observable<ArrayList<AddFriendNotification>>{
+
+        return Observable.create(ObservableOnSubscribe<ArrayList<AddFriendNotification>> { emitter->
+
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+            mDataBase = FirebaseDatabase.getInstance().reference.child("FriendsRequests")
+                .child(mCurrentUser!!.uid)
+
+            mDataBase.addValueEventListener(object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {
+                    Log.d("Error getNotifications()","Error = ${p0.message}")
+                    emitter.onError(Throwable(p0.message))
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    var tempNotificationList = arrayListOf<AddFriendNotification>()
+
+                    p0.children.forEach {snapshot->
+                        val sourceUID = snapshot.child("Source_UID").value.toString()
+                        val sourceUname = snapshot.child("Source_UName").value.toString()
+                        val targetUID = snapshot.child("Target_UID").value.toString()
+                        val targetUName = snapshot.child("Target_UName").value.toString()
+                        val status = snapshot.child("status").value.toString()
+
+                        if (targetUID == CurrentUser.userID){
+                            var newFriendNotification = AddFriendNotification("New Friend Request From: ${sourceUname}","EMPTY")
+                            newFriendNotification.sourceUID = sourceUID
+                            newFriendNotification.sourceUName = sourceUname
+                            newFriendNotification.status = status
+                            newFriendNotification.targetUID = targetUID
+                            newFriendNotification.targetUName = targetUName
+
+                            tempNotificationList.add(newFriendNotification)
+                        }
+
+                        emitter.onNext(tempNotificationList)
+
+                    }
+                }
+            })
+        })
+
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun getFriendsList(): Observable<ArrayList<User>> {
+        return Observable.create(ObservableOnSubscribe<ArrayList<User>> { emitter->
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+            mDataBase = FirebaseDatabase.getInstance().reference.child("Friends")
+                .child(mCurrentUser!!.uid)
+
+            mDataBase.addValueEventListener(object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {
+                    Log.d("Error getNotifications()","Error = ${p0.message}")
+                    emitter.onError(Throwable(p0.message))
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    var tempUserList = arrayListOf<User>()
+
+                    p0.children.forEach { snapshot ->
+                        var displayName = snapshot.child("displayname").value.toString()
+                        var imageUrl = snapshot.child("imageUrl").value.toString()
+                        var status = snapshot.child("status").value.toString()
+                        var thumbimageurl = snapshot.child("thumbimageurl").value.toString()
+                        var userID = snapshot.child("userid").value.toString()
+
+                        var user = User(displayName, userID)
+                        user.status = status
+                        user.thumb_image_url = thumbimageurl
+                        user.image_url = imageUrl
+                        tempUserList.add(user)
+                    }
+                    emitter.onNext(tempUserList)
+                    emitter.onComplete()
+                }})
+        })
+
     }
 
 }

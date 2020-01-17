@@ -1,6 +1,6 @@
 package com.almitasoft.choremeapp.model
 
-// singelton
+// Singelton object
 object CurrentUser
 {
         var displanyName : String?=null
@@ -9,4 +9,5 @@ object CurrentUser
         var status: String?=null
         var thumb_image_url : String?= null
         var image_url : String?= null
+        var friendsList : ArrayList<User>?=null
 }

@@ -29,6 +29,10 @@ android {
     }
 }
 
+def rxJavaVersion = '2.0.1'
+def mockitoVersion = '2.11.0'
+def koin_version = "2.0.1"
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -45,9 +49,20 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
     implementation 'com.google.firebase:firebase-database:16.0.4'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
-    implementation 'org.koin:koin-android:2.0.1'
-    testImplementation 'junit:junit:4.12'
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
+
+    implementation 'org.koin:koin-android:2.0.1'
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+    implementation 'org.koin:koin-test:2.0.1'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-inline:$mockitoVersion"
+    testImplementation "android.arch.core:core-testing:1.1.1"
+    androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    // Koin for Unit tests
+   
 }

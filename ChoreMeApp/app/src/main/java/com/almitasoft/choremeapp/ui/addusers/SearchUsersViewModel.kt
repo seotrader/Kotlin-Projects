@@ -18,10 +18,11 @@ import org.koin.core.inject
 class SearchUsersViewModel : ViewModel(), KoinComponent {
 
     lateinit var mDataBase : DatabaseReference
-
     var mCurrentUser : FirebaseUser?=null
-
     private val fb : FireBaseManager by inject()
+
+    var loadingUsers = MutableLiveData<Boolean>()
+    var errorLoading = MutableLiveData<Boolean>()
 
     fun isUserConnected() = (FirebaseAuth.getInstance().currentUser != null)
 
@@ -40,11 +41,15 @@ class SearchUsersViewModel : ViewModel(), KoinComponent {
 
         userList.clear()
 
+        loadingUsers.value = true
+
         // in case the current user is connected, go ahead and bring all users
         mCurrentUser?.run{
             mDataBase.child("Users").addValueEventListener(object: ValueEventListener{
                 override fun onCancelled(p0: DatabaseError) {
                     Log.d("Firebase Error", p0.message)
+                    loadingUsers.value = false
+                    errorLoading.value = true
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
@@ -62,14 +67,18 @@ class SearchUsersViewModel : ViewModel(), KoinComponent {
                         user.image_url = image
                         user.thumb_image_url = thumb_image
                         userList.add(user)
+
+
+
                     }
                     Log.d("onDataChange", "Data Read Succesfully")
 
                     listOfAllUsers.value = userList
+
+                    loadingUsers.value = false
+                    errorLoading.value = false
                 }
-
             })
-
         }
 
         return listOfAllUsers

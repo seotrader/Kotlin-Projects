@@ -1,45 +1,52 @@
 package com.almitasoft.choremeapp.ui.notifications
 
-import android.app.Activity
-import android.app.Notification
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.almitasoft.choremeapp.R
 import com.almitasoft.choremeapp.model.AddFriendNotification
+import com.almitasoft.choremeapp.model.NotificationType
+import com.almitasoft.choremeapp.model.User
+import com.almitasoft.choremeapp.ui.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_notifications.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NotificationsFragment : Fragment() {
 
-    private lateinit var notificationsViewModel: NotificationsViewModel
     private lateinit var notificationAdapter: NotificationAdapter
-    var notificationsList = arrayListOf<com.almitasoft.choremeapp.model.Notification>()
+    private lateinit var sharedViewModel: SharedViewModel
+    private val notificationsViewModel : NotificationsViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        notificationsViewModel =
-            ViewModelProviders.of(this).get(NotificationsViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_notifications, container, false)
-        notificationsViewModel.text.observe(this, Observer {
+//        notificationsViewModel =
+//            ViewModelProviders.of(this).get(NotificationsViewModel::class.java)
 
-        })
+
+        activity?.let{
+            sharedViewModel = ViewModelProviders.of(it).get(SharedViewModel::class.java)
+        }
+
+
+        val root = inflater.inflate(R.layout.fragment_notifications, container, false)
+
         return root
     }
 
     fun setAdapter(){
-        notificationAdapter = NotificationAdapter(notificationsList)
+        notificationAdapter = NotificationAdapter(arrayListOf(),this)
 
-        notificationsList.add(AddFriendNotification("XXX Wants to add you"))
-        notificationsList.add(AddFriendNotification("YYY Wants to add you"))
+
         notificationRV.apply {
             adapter = notificationAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -49,9 +56,53 @@ class NotificationsFragment : Fragment() {
     }
 
     fun observe(){
-        notificationsViewModel.getUsersList().observe(this, Observer {
-            notificationsList.addAll(it)
+
+        notificationsViewModel.refreshData()
+
+        notificationsViewModel.notificationList.observe(this, Observer {
+            notificationAdapter.notificationList.addAll(it)
             notificationAdapter.notifyDataSetChanged()
+        })
+
+//        notificationsViewModel.getNotificationsList().observe(this, Observer {
+//            notificationAdapter.notificationList.addAll(it)
+//            notificationAdapter.notifyDataSetChanged()
+//        })
+
+    }
+
+    fun deleteFriend(user : User, notification: AddFriendNotification){
+        notificationsViewModel.deleteFriend(user).observe(this, Observer {
+            if (it.result == "OK"){
+                Toast.makeText(activity!!.applicationContext,
+                    "User ${user.displayName} Was Removed As Your Friend !",
+                    Toast.LENGTH_LONG).show()
+                notificationAdapter.notificationList.remove(notification)
+                notificationAdapter.notifyDataSetChanged()
+            }else{
+                Log.d("NotificationsFragment:deleteFriend", "Error = ${it.result}")
+            }
+        })
+    }
+    fun addFriend(notification : AddFriendNotification){
+        var user = User(notification.sourceUName, notification.sourceUID)
+
+        sharedViewModel.getTargetUserData(user).observe(this, Observer {returnedUser->
+
+            returnedUser?.let{
+                sharedViewModel.addFriend(it).observe(this, Observer {
+                    if (it.result == "OK"){
+                        Toast.makeText(activity!!.applicationContext,
+                            "User ${user.displayName} is Your Friend Now!",
+                            Toast.LENGTH_SHORT).show()
+                        notificationAdapter.notificationList.remove(notification)
+                        notificationAdapter.notifyDataSetChanged()
+                    }
+                    else{
+                        Log.d("NotificationsFragment:AddFriend", "Error = ${it.result.toString()}")
+                    }
+                })
+            }
         })
 
     }

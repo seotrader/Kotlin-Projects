@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import com.almitasoft.choremeapp.ui.MainActivity
 import com.almitasoft.choremeapp.R
 import com.almitasoft.choremeapp.data.FireBaseManager
+import com.almitasoft.choremeapp.model.CurrentUser
+import com.almitasoft.choremeapp.model.User
 import com.almitasoft.choremeapp.ui.SharedViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -59,8 +62,17 @@ class DashboardFragment : Fragment() {
 
             fbManager.getCurrentUserData().observe(this, Observer {
                 if (it.result == "OK") {
+                    mainActivity.title = "DashBoard: ${CurrentUser.displanyName}"
                 }else{
                     Toast.makeText(mainActivity, "ERROR WITH DBS", Toast.LENGTH_SHORT).show()
+
+                }
+            })
+
+            dashboardViewModel.getFriendsList().observe(this, Observer {
+                it?.let{
+                    CurrentUser.friendsList = it
+
                 }
             })
 
