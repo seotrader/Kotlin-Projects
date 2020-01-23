@@ -9,15 +9,35 @@ These projects are all built exclusively by Gilad Raz-Rozneberg for Android via 
 https://github.com/seotrader/Kotlin-Projects/tree/master/WowChat
 
 * ChoreMeApp ( soon will be in appstore after first version is ready)
+
+https://github.com/seotrader/Kotlin-Projects/tree/master/ChoreMeApp
+
 * Rick And Morty - Latest Version
+
+https://github.com/seotrader/Kotlin-Projects/tree/master/Rick%20And%20Morty%20-%20Latest%20Version
+
 
 # Less Complex Projects ( Testing Technologies mainly )
 
 * AlarmManager ( in Appstore)
+
+https://github.com/seotrader/Kotlin-Projects/tree/master/AlarmManager
+
 * Media Player ( Media player and use of content providers)
+
+https://github.com/seotrader/Kotlin-Projects/tree/master/MediaPlayer
+
 * Countires ( using RXJava and Retrofit to read JSON API )
-* ChoreApp ( simple chores app with ROOM)
+
+https://github.com/seotrader/Kotlin-Projects/tree/master/Countires
+
+* ChoreApp ( simple chores app with ROOM and MVVM)
+
+https://github.com/seotrader/Kotlin-Projects/tree/master/ChoreApp
+
 * RecipeFinderApp ( JSON with Volley)
+
+https://github.com/seotrader/Kotlin-Projects/tree/master/RecipeFinderApp
 
 # Technologies Stack
 
@@ -25,11 +45,14 @@ https://github.com/seotrader/Kotlin-Projects/tree/master/WowChat
 * Kotlin
 * Java
 * FireBase ( Database , Storage)
-
+* Picasso for images
+* Volley for JSON
+* ROOM and SQLite
 
 # Architecture 
 
 * MVVM
 * Android Jetpack Navigation
 * Koin - Dependency Injection
+* Dagger2
 * Unitest UNIT, KoinTest, Mockito 
