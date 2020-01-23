@@ -1,6 +1,6 @@
-## Project by Gilad Raz - Rozenberg
+# Project by Gilad Raz - Rozenberg
 
-These projects are all built exclusivly by Gilad Raz Rozneberg
+These projects are all built exclusively by Gilad Raz-Rozneberg for Android via Android Studio
 
 # More Complex Projects
 
