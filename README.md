@@ -44,7 +44,7 @@ https://github.com/seotrader/Kotlin-Projects/tree/master/RecipeFinderApp
 * Android
 * Kotlin
 * Java
-* FireBase ( Database , Storage)
+* FireBase Cloud (Push, Database , Storage)
 * Picasso for images
 * Volley for JSON
 * ROOM and SQLite
