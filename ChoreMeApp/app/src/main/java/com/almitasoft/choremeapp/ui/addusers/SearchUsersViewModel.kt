@@ -53,12 +53,14 @@ class SearchUsersViewModel : ViewModel(), KoinComponent {
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
+                    userList.clear()
+
                     p0.children.forEach {snapshot->
                         var displayName = snapshot.child("display name").value.toString()
                         var email = snapshot.child("email").value.toString()
                         var image = snapshot.child("image").value.toString()
                         var status = snapshot.child("status").value.toString()
-                        var thumb_image = snapshot.child("status").value.toString()
+                        var thumb_image = snapshot.child("thumb_image").value.toString()
 
                         var user = User(displayName,snapshot.key.toString())
 

@@ -11,7 +11,6 @@ import org.koin.core.inject
 
 class DashboardViewModel : ViewModel(), KoinComponent {
 
-    var friendsList = MutableLiveData<ArrayList<User>>()
     private val disposable = CompositeDisposable()
     private val fb : FireBaseManager by inject()
 
@@ -19,11 +18,4 @@ class DashboardViewModel : ViewModel(), KoinComponent {
         value = "Here You Will See All Your Tasks..."
     }
     val text: LiveData<String> = _text
-
-    fun getFriendsList() : LiveData<ArrayList<User>>{
-        disposable.add(fb.getFriendsList().subscribe{
-            friendsList.value = it
-        })
-        return friendsList
-    }
 }

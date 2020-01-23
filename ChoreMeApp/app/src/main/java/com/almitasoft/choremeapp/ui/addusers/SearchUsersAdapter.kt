@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.almitasoft.choremeapp.R
 import com.almitasoft.choremeapp.model.User
+import com.squareup.picasso.Picasso
 
 class SearchUsersAdapter(var usersList:ArrayList<User>,
                          var searchUserFrgmt : SearchUsers) : RecyclerView.Adapter<SearchUsersAdapter.ViewHolder>(), Filterable {
@@ -70,7 +71,10 @@ class SearchUsersAdapter(var usersList:ArrayList<User>,
             var button = itemView.findViewById<Button>(R.id.btnFriendRequest)
 
             displayName.text = user.displayName
-            image.setImageResource(R.drawable.default_avata)
+
+            Picasso.get().load(user.thumb_image_url)
+                .placeholder(R.drawable.default_avata)
+                .into(image)
 
             button.setOnClickListener {
                 searchUserFrgmt.addUser(user)

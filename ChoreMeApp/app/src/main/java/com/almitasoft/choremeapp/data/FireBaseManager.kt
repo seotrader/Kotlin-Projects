@@ -1,16 +1,24 @@
 package com.almitasoft.choremeapp.data
 
+import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.almitasoft.choremeapp.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
+import id.zelory.compressor.Compressor
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 class FireBaseManager : FireBaseInterface {
 
@@ -25,6 +33,131 @@ class FireBaseManager : FireBaseInterface {
     var requestedTargetUser = MutableLiveData<User>()
     var requestDeleteFriend = MutableLiveData<Result>()
 
+    var mStorageRef = FirebaseStorage.getInstance().reference
+    var userID = FirebaseAuth.getInstance().currentUser
+
+    override fun getTargetUserData2(userID: String): Observable<User> {
+        var targetUser : User?=null
+
+        return Observable.create(ObservableOnSubscribe<User> {emitter->
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+            mDataBase = FirebaseDatabase.getInstance().reference.child("Users")
+                .child(userID)
+
+            mDataBase.addValueEventListener(object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {
+                    Log.d("Error getTargetUserData2()","Error = ${p0.message}")
+                    emitter.onError(Throwable(p0.message))
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    val displayName = p0.child("display name").value.toString()
+                    val userEmail = p0.child("email").value.toString()
+                    val status = p0.child("status").value.toString()
+                    val image_url = p0.child("image").value.toString()
+                    val thumb_image_url = p0.child("thumb_image").value.toString()
+
+                    var user = User(displayName, userID)
+                    user.userEmail = userEmail
+                    user.status = status
+                    user.image_url = image_url
+                    user.thumb_image_url = thumb_image_url
+                    emitter.onNext(user)
+                    emitter.onComplete()
+                }
+            })
+
+        })
+    }
+
+    override fun uploadUserImage(uri : Uri, byteArray: ByteArray) : Observable<Result>{
+
+        var thumbFile = File(uri.path.toString())
+
+        return Observable.create(ObservableOnSubscribe<Result> { emitter ->
+            var result = GetUserDataResult("OK")
+
+            var filePath = mStorageRef.child("chat_profile_images")
+                .child(userID.toString()+".jpg")
+
+            if (userID == null){
+                emitter.onError(Throwable("ERROR: User isn't connected"))
+            }else{
+                // create another directory for thumbImages ( smallaer compressed images)
+                var thumbFilePath = mStorageRef.child("chat_profile_images")
+                    .child("thumbs  ")
+                    .child(userID.toString()+".jpg")
+
+                filePath.putFile(uri)
+                    .addOnCompleteListener {
+                        var downloadUrl : String?= null
+                        if (it.isSuccessful) {
+                            filePath.downloadUrl.addOnCompleteListener {task->
+                                if (task.isSuccessful){
+                                    downloadUrl = task.result.toString()
+                                }
+                                else{
+                                    emitter.onError(Throwable(task.exception.toString()))
+                                }
+                            }
+                        }
+
+                        // upload task
+                        var uploadTask : UploadTask = thumbFilePath
+                            .putBytes(byteArray)
+                        uploadTask.addOnCompleteListener {
+                            var thumbUrl : String
+                            // it.result!!.storage.downloadUrl.toString()
+                            if (it.isSuccessful){
+                                it.result!!.storage.downloadUrl.addOnCompleteListener {
+                                    thumbUrl = it.result.toString()
+                                    var updateObj = HashMap<String, Any>()
+                                    updateObj.put("image",downloadUrl.toString())
+                                    updateObj.put("thumb_image",thumbUrl.toString())
+                                    // save the profile image
+                                    mDataBase.updateChildren(updateObj)
+                                        .addOnCompleteListener {
+                                            if (it.isSuccessful){
+                                                emitter.onNext(result)
+                                                emitter.onComplete()
+                                            }else{
+                                                result.result = it.exception.toString()
+                                                emitter.onNext(result)
+                                                emitter.onComplete()
+                                            }
+
+                                        }
+                                }
+                            }else{
+                            }
+
+                        }
+                    }
+            }
+        })
+    }
+    override fun deleteFriendNotification(notification: AddFriendNotification): Observable<Result> {
+        return Observable.create(ObservableOnSubscribe<Result>{emitter->
+            var result = GetUserDataResult("OK")
+
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+            mDataBase = FirebaseDatabase.getInstance().reference.child("FriendsRequests")
+                .child(mCurrentUser!!.uid).child(notification.sourceUID)
+
+            mDataBase.removeValue().addOnCompleteListener {task->
+                if (task.isSuccessful){
+                    emitter.onNext(result)
+                }
+                else{
+                    Log.d("Error deleteFriendNotification()","Error = ${task.result.toString()}")
+                    emitter.onError(Throwable(task.result.toString()))
+                }
+            }
+        }
+        )
+    }
 
     override fun deleteNotification(notification: Notification): Observable<Result> {
         return Observable.create(ObservableOnSubscribe<Result>{emitter->
@@ -433,7 +566,7 @@ class FireBaseManager : FireBaseInterface {
             mDataBase = FirebaseDatabase.getInstance().reference.child("Friends")
                 .child(mCurrentUser!!.uid)
 
-            mDataBase.addValueEventListener(object : ValueEventListener{
+            mDataBase.addListenerForSingleValueEvent(object : ValueEventListener{
                 override fun onCancelled(p0: DatabaseError) {
                     Log.d("Error getNotifications()","Error = ${p0.message}")
                     emitter.onError(Throwable(p0.message))

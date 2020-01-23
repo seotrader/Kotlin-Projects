@@ -6,6 +6,19 @@
     app:startDestination="@+id/navigation_dashboard">
 
     <fragment
+        android:id="@+id/addTask"
+        android:name="com.almitasoft.choremeapp.ui.addTask.AddTaskFragment"
+        android:label="Add New Task"
+        tools:layout="@layout/add_task_fragment"/>
+
+    <fragment
+        android:id="@+id/user_settings"
+        android:name="com.almitasoft.choremeapp.ui.Settings.UserSettingsFragment"
+        android:label="User Settings"
+        tools:layout="@layout/user_settings_fragment"/>
+
+
+    <fragment
         android:id="@+id/login_screen"
         android:name="com.almitasoft.choremeapp.ui.login.LoginFragment"
         android:label="Login To ChoreMe"

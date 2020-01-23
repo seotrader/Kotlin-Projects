@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_200"
+    tools:context="com.almitasoft.choremeapp.ui.addTask.AddTaskFragment">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/CIVCurrentUser"
+        android:layout_width="@dimen/MediumImage"
+        android:layout_height="@dimen/MediumImage"
+        android:layout_marginTop="@dimen/smallPadding"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/smallPadding"
+        android:contentDescription="@string/userImage"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/TVUserName"
+        android:layout_below="@id/CIVCurrentUser"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/darkPurple"
+        android:layout_width="wrap_content"
+        android:textSize="@dimen/SmallTextSize"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
+        android:layout_below="@id/TVUserName"
+        android:id="@+id/TV_TaskName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/darkPurple"
+        android:textSize="@dimen/GoodTextSize"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/smallPadding"
+        android:text="@string/taskdetails" />
+
+    <EditText
+        android:layout_below="@id/TV_TaskName"
+        android:id="@+id/ED_TaskName"
+        android:layout_marginTop="@dimen/smallPadding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/tasknamehint"
+        android:inputType="textLongMessage"/>
+
+    <TextView
+        android:id="@+id/TVDate"
+        android:layout_below="@id/ED_TaskName"
+        android:layout_width="wrap_content"
+        android:textColor="@color/darkPurple"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/GoodTextSize"
+        android:text="@string/Enterdate" />
+
+    <Button
+        android:id="@+id/btnSelectedDate"
+        android:stateListAnimator="@drawable/state_list_animator_z"
+        android:layout_below="@id/TVDate"
+        android:layout_marginTop="@dimen/smallPadding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/SmallTextSize"
+        android:layout_centerHorizontal="true"
+        android:text="@string/selectdate" />
+
+
+
+    <TextView
+        android:id="@+id/TVCurrentDate"
+        android:layout_below="@id/btnSelectedDate"
+        android:textSize="@dimen/SmallTextSize"
+        android:paddingLeft="@dimen/smallPadding"
+        android:layout_marginTop="@dimen/smallPadding"
+        android:textColor="@color/darkPurple"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Currentdate" />
+
+
+    <Button
+        android:id="@+id/btnTargetUser"
+        android:stateListAnimator="@drawable/state_list_animator_z"
+        android:layout_below="@id/TVCurrentDate"
+        android:layout_marginTop="@dimen/smallPadding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/SmallTextSize"
+        android:layout_centerHorizontal="true"
+        android:text="@string/PickUser" />
+
+
+</RelativeLayout>

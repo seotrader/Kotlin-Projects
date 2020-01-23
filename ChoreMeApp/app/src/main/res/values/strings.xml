@@ -20,5 +20,16 @@
     <string name="friend_request">You Have a New Friend Request</string>
     <string name="Approve">Approve?</string>
     <string name="new_task_notification">You Have a New Task From</string>
+    <string name="nickname">nickname</string>
+    <string name="Status">Status</string>
+    <string name="ChangePicture">Change Your Picture</string>
+    <string name="ChangeStatus">ChangeStatus</string>
+    <string name="UserSettings">Settings</string>
+    <string name="tasknamehint">Enter Task Name</string>
+    <string name="taskdetails">Enter Task Name</string>
+    <string name="Enterdate">Task Expiration Date</string>
+    <string name="selectdate">Pick a Date</string>
+    <string name="Currentdate">Current Date:</string>
+    <string name="PickUser">Pick Target User</string>
 
 </resources>

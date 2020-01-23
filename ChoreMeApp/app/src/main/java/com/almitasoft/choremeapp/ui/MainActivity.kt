@@ -1,5 +1,8 @@
 package com.almitasoft.choremeapp.ui
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -13,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
@@ -22,10 +26,13 @@ import com.almitasoft.choremeapp.Notifications.NotificationSender
 import com.almitasoft.choremeapp.R
 import com.almitasoft.choremeapp.data.FireBaseManager
 import com.almitasoft.choremeapp.di.appModule
+import com.almitasoft.choremeapp.model.CurrentUser
 import com.almitasoft.choremeapp.model.NotificationType
+import com.almitasoft.choremeapp.model.User
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_with_menu.*
 import org.koin.android.ext.android.inject
@@ -82,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         fab.setOnClickListener { view ->
-            Toast.makeText(applicationContext, "FAB ICON CLICKED",Toast.LENGTH_SHORT).show()
+            navController.navigate(R.id.addTask)
 
         }
 
@@ -96,7 +103,20 @@ class MainActivity : AppCompatActivity() {
 
         observeNotifications()
 
+        setObservers()
+
         printWindowSize()
+    }
+
+    private fun setObservers(){
+
+        viewModel.getFriendsList().observe(this, object: Observer<ArrayList<User>> {
+
+            override fun onChanged(t: ArrayList<User>?) {
+                CurrentUser.friendsList = t
+            }
+        })
+
     }
 
     fun observeNotifications(){
@@ -106,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                     NotificationType.ADDFRIEND -> {
                         notificationService.Notify(notification.notificationMessage,0)
                     }
-                    NotificationType.GENERALNOTIFICATION -> {
+                    NotificationType.NEWFRIENDNOTIFICATION -> {
 
                     }
                     NotificationType.ADDTASK -> {
@@ -142,7 +162,6 @@ class MainActivity : AppCompatActivity() {
 
         notificationService.removeNotificationChannel()
         notificationService.createNotificationChannel()
-        notificationService.Notify("New Friend Notification",1)
     }
 
     override fun onBackPressed() {
@@ -188,6 +207,10 @@ class MainActivity : AppCompatActivity() {
             // log the user out
             FirebaseAuth.getInstance().signOut()
             navController.navigate(R.id.welcome_screen)
+        }else{
+            if (item.itemId == R.id.menuUserSettings){
+                navController.navigate(R.id.user_settings)
+            }
         }
 
 
@@ -196,6 +219,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("onActivityResult", "Request code = $requestCode")
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            viewModel.cropeActivityResult.value = CropImage.getActivityResult(data)
+
+        }
     }
 
     override fun onResume(){

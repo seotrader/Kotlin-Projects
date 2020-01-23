@@ -6,10 +6,12 @@
     <dimen name="smallPadding">10dp</dimen>
     <dimen name="mediumPadding">30dp</dimen>
     <dimen name="MediumTextSize">36sp</dimen>
+    <dimen name="GoodTextSize">22sp</dimen>
     <dimen name="SmallTextSize">18sp</dimen>
     <dimen name="TinyTextSize">14sp</dimen>
     <dimen name="SmallPadding">10sp</dimen>
     <dimen name="SmallImage">50dp</dimen>
+    <dimen name="MediumImage">75dp</dimen>
     <dimen name="Corner">5dp</dimen>
     <dimen name="Elevation">4dp</dimen>
     <dimen name="fab_margin">16dp</dimen>

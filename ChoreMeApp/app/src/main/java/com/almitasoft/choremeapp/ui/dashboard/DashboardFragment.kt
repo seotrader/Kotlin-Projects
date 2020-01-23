@@ -69,23 +69,13 @@ class DashboardFragment : Fragment() {
                 }
             })
 
-            dashboardViewModel.getFriendsList().observe(this, Observer {
-                it?.let{
-                    CurrentUser.friendsList = it
+            sharedViewModel.getFriendsList().observe(this, object: Observer<ArrayList<User>> {
 
+                override fun onChanged(t: ArrayList<User>?) {
+                    CurrentUser.friendsList = t
                 }
             })
-
-
         }
-
-
-
-//        mainActivity.navController.navigate(R.id.welcome_screen,
-//                                            null,
-//                                            NavOptions.Builder()
-//                                                .setPopUpTo(R.id.welcome_screen,
-//                                                    false).build())
 
         return root
     }

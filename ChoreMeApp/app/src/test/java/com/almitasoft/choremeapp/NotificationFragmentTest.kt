@@ -36,6 +36,12 @@ class NotificationFragmentTest : KoinTest{
     private var testObserable : Observable<ArrayList<AddFriendNotification>>?=null
 
     @Test
+    fun deleteNotification(){
+        val lv : NotificationsViewModel by inject()
+
+
+    }
+    @Test
     fun getNotificationsListSuccess(){
         val lv : NotificationsViewModel by inject()
 
@@ -45,9 +51,9 @@ class NotificationFragmentTest : KoinTest{
 
         val notificationList = arrayListOf<AddFriendNotification>()
 
-        notificationList.add(AddFriendNotification("XXX ADDED YYY"))
-        notificationList.add(AddFriendNotification("BBB ADDED TASK BBB"))
-        notificationList.add(AddFriendNotification("CCC ADDED DDD"))
+        notificationList.add(AddFriendNotification("XXX ADDED YYY", "EMPTY"))
+        notificationList.add(AddFriendNotification("BBB ADDED TASK BBB", "EMPTY"))
+        notificationList.add(AddFriendNotification("CCC ADDED DDD", "EMPTY"))
 
         testObserable = Observable.just(notificationList)
 
@@ -63,7 +69,7 @@ class NotificationFragmentTest : KoinTest{
                 return ExecutorScheduler.ExecutorWorker(Executor { it.run() })
             }
 
-            override fun scheduleDirect(run: Runnable?, delay: Long, unit: TimeUnit?): Disposable {
+            override fun scheduleDirect(run: Runnable, delay: Long, unit: TimeUnit): Disposable {
                 return super.scheduleDirect(run, 0, unit)
             }
         }

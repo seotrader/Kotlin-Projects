@@ -15,10 +15,9 @@ class NotificationsReceiver : BroadcastReceiver(), KoinComponent{
     private val notificationService :  NotificationSender by inject { parametersOf(this) }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Toast.makeText(context,"Received a notification", Toast.LENGTH_LONG).show()
 
         if (intent!!.action.equals("com.tester.close")){
-            Log.d("Close Broadcast","Close event received in service")
+            Log.d("NotificationsReceiver::onReceive","Close event received in service")
             notificationService.removeNotificationChannel()
             notificationService.createNotificationChannel()
         }
@@ -26,6 +25,7 @@ class NotificationsReceiver : BroadcastReceiver(), KoinComponent{
         if (intent.action.equals("com.tester.open")){
             //start activity
             //start activity
+            Log.d("NotificationsReceiver::onReceive","com.tester.open event received in service")
             val i = Intent()
             i.setClassName(context!!.packageName, MainActivity::class.java.name)
             i.flags = Intent.FLAG_ACTIVITY_NEW_TASK

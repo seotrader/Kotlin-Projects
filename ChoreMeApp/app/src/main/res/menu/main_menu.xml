@@ -3,8 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/menuUserSettings"
+        android:title="@string/UserSettings" />
+
+    <item
         android:id="@+id/logoutID"
         android:title="@string/logout" />
+
+
     <item
         android:title=""
         android:id="@+id/search_btn"

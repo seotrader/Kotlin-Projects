@@ -89,10 +89,9 @@ class SearchUsers : Fragment() {
         if (viewModel.isUserConnected()){
 
             viewModel.getListOfUsers().observe(this, Observer{listReceived->
-                Toast.makeText(mainActivity, "User List Was Read Successfully",
-                    Toast.LENGTH_SHORT).show()
 
                 usersArrayList.clear()
+                searchUsersAdapter.savedFullUserList.clear()
 
                 viewModel.getNotificationList().observe(this, Observer { notificationList->
                     notificationList.removeIf {

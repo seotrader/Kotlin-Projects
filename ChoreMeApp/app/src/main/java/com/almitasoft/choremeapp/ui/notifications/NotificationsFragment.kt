@@ -12,17 +12,22 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.almitasoft.choremeapp.R
 import com.almitasoft.choremeapp.model.AddFriendNotification
+import com.almitasoft.choremeapp.model.CurrentUser
 import com.almitasoft.choremeapp.model.NotificationType
 import com.almitasoft.choremeapp.model.User
+import com.almitasoft.choremeapp.ui.MainActivity
 import com.almitasoft.choremeapp.ui.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.get
 
 class NotificationsFragment : Fragment() {
 
     private lateinit var notificationAdapter: NotificationAdapter
-    private lateinit var sharedViewModel: SharedViewModel
-    private val notificationsViewModel : NotificationsViewModel by viewModel()
+    lateinit var sharedViewModel: SharedViewModel
+    val notificationsViewModel : NotificationsViewModel by viewModel()
+    private lateinit var mainActivity : MainActivity
+    var friendsList = arrayListOf<User>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +40,7 @@ class NotificationsFragment : Fragment() {
 
         activity?.let{
             sharedViewModel = ViewModelProviders.of(it).get(SharedViewModel::class.java)
+            mainActivity = activity as MainActivity
         }
 
 
@@ -64,6 +70,14 @@ class NotificationsFragment : Fragment() {
             notificationAdapter.notifyDataSetChanged()
         })
 
+        sharedViewModel.getFriendsList().observe(this,object: Observer<ArrayList<User>>{
+            override fun onChanged(friends: ArrayList<User>?) {
+                friends?.let{
+                    friendsList = it
+                }
+            }
+        })
+
 //        notificationsViewModel.getNotificationsList().observe(this, Observer {
 //            notificationAdapter.notificationList.addAll(it)
 //            notificationAdapter.notifyDataSetChanged()
@@ -71,21 +85,24 @@ class NotificationsFragment : Fragment() {
 
     }
 
-    fun deleteFriend(user : User, notification: AddFriendNotification){
-        notificationsViewModel.deleteFriend(user).observe(this, Observer {
+    fun deleteFriendNotification(notification: AddFriendNotification){
+
+        notificationsViewModel.deleteFriendNotification(notification).observe(this, Observer {
             if (it.result == "OK"){
                 Toast.makeText(activity!!.applicationContext,
-                    "User ${user.displayName} Was Removed As Your Friend !",
+                    "User ${notification.sourceUName} Notification was deleted !",
                     Toast.LENGTH_LONG).show()
                 notificationAdapter.notificationList.remove(notification)
                 notificationAdapter.notifyDataSetChanged()
+                Log.d("Delete Notifiation Success", "User ${notification.sourceUName} Notification was deleted !")
             }else{
                 Log.d("NotificationsFragment:deleteFriend", "Error = ${it.result}")
             }
         })
     }
+
     fun addFriend(notification : AddFriendNotification){
-        var user = User(notification.sourceUName, notification.sourceUID)
+        val user = User(notification.sourceUName, notification.sourceUID)
 
         sharedViewModel.getTargetUserData(user).observe(this, Observer {returnedUser->
 
@@ -97,9 +114,17 @@ class NotificationsFragment : Fragment() {
                             Toast.LENGTH_SHORT).show()
                         notificationAdapter.notificationList.remove(notification)
                         notificationAdapter.notifyDataSetChanged()
+                        mainActivity.navController.navigate(R.id.navigation_notifications)
                     }
                     else{
                         Log.d("NotificationsFragment:AddFriend", "Error = ${it.result.toString()}")
+                    }
+                })
+
+                sharedViewModel.getFriendsList().observe(this, object: Observer<ArrayList<User>> {
+
+                    override fun onChanged(t: ArrayList<User>?) {
+                        CurrentUser.friendsList = t
                     }
                 })
             }

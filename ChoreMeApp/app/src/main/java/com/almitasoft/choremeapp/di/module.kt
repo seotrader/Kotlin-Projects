@@ -3,6 +3,9 @@ import android.content.Context
 import com.almitasoft.choremeapp.Notifications.NotificationSender
 import com.almitasoft.choremeapp.data.FireBaseInterface
 import com.almitasoft.choremeapp.data.FireBaseManager
+import com.almitasoft.choremeapp.ui.Settings.UserSettingsViewModel
+import com.almitasoft.choremeapp.ui.addTask.AddTaskFragment
+import com.almitasoft.choremeapp.ui.addTask.AddTaskViewModel
 import com.almitasoft.choremeapp.ui.notifications.NotificationsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.KoinComponent
@@ -17,6 +20,8 @@ val appModule = module {
     factory {FireBaseManager() as FireBaseInterface}
    // factory {FireBaseManager() as FireBaseManager}
     viewModel{NotificationsViewModel(get())}
+    viewModel{UserSettingsViewModel(get())}
+    viewModel{AddTaskViewModel(get())}
 
 }
 

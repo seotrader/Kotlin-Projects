@@ -6,11 +6,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.almitasoft.choremeapp.R
 import com.almitasoft.choremeapp.model.AddFriendNotification
 import com.almitasoft.choremeapp.model.Notification
 import com.almitasoft.choremeapp.model.User
+import com.squareup.picasso.Picasso
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class NotificationAdapter(
     var notificationList: kotlin.collections.ArrayList<Notification>,
@@ -58,13 +61,25 @@ class NotificationAdapter(
 
             tvUserAdded.text = friendNotification.notificationMessage
 
+
+            val user = User(friendNotification.sourceUName,friendNotification.sourceUID)
+
+            notificationsFragment.notificationsViewModel.getTargetUserData(user).
+                observe(notificationsFragment, Observer {
+                    it?.let{
+                        Picasso.get().load(it.thumb_image_url)
+                            .placeholder(R.drawable.default_avata)
+                            .into(image)
+                    }
+                })
+
             btnApprove.setOnClickListener {
                 notificationsFragment.addFriend(friendNotification)
+                notificationsFragment.deleteFriendNotification(friendNotification)
             }
 
             btnReject.setOnClickListener {
-                val user = User(friendNotification.sourceUName,friendNotification.sourceUID)
-                notificationsFragment.deleteFriend(user,friendNotification)
+                notificationsFragment.deleteFriendNotification(friendNotification)
             }
         }
     }
