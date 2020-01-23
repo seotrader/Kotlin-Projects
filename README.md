@@ -1,6 +1,6 @@
 # Projects by Gilad Raz - Rozenberg
 
-These projects are all built exclusively by Gilad Raz-Rozneberg for Android via Android Studio
+These projects are all built exclusively by Gilad Raz-Rozneberg for Android via Android Studio mainly Kotlin code but also with Java
 
 # More Complex Projects
 
@@ -19,7 +19,7 @@ https://github.com/seotrader/Kotlin-Projects/tree/master/ChoreMeApp
 https://github.com/seotrader/Kotlin-Projects/tree/master/Rick%20And%20Morty%20-%20Latest%20Version
 
 
-# Less Complex Projects ( Testing Technologies mainly )
+# Less Complex Projects ( Testing Technologies Mainly )
 
 * AlarmManager ( in Appstore)
 
