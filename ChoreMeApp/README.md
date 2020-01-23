@@ -6,11 +6,12 @@ Multi-User Chores App, Run on the Cloub with Firebase
 
 * Android
 * Kotlin
+* Java
 * FireBase
 
 
 # Architecture 
 
 * MVVM
-* Koin
-* Dependency Injection
+* Koin - Dependency Injection
+* Unitest UNIT, KoinTest, Mockito 
