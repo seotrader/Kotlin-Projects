@@ -7,7 +7,7 @@ Multi-User Chores App, Run on the Cloub with Firebase
 * Android
 * Kotlin
 * Java
-* FireBase
+* FireBase ( Database , Storage)
 
 
 # Architecture 
