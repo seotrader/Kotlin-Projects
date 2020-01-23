@@ -10,7 +10,7 @@ https://github.com/seotrader/Kotlin-Projects/tree/master/WowChat
 
 * ChoreMeApp ( soon will be in appstore after first version is ready)
 
-This is a cloud based app that allow you to manage create and manage tasks to your friends, the task is being built at the moment
+This is a cloud based firebase app that allow you to manage create and manage tasks to your friends/employees in a fun and easy way
 
 https://github.com/seotrader/Kotlin-Projects/tree/master/ChoreMeApp
 
