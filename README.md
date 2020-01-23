@@ -5,6 +5,9 @@ These projects are all built exclusively by Gilad Raz-Rozneberg for Android via 
 # More Complex Projects
 
 * Wowchat ( in Appstore)
+
+https://github.com/seotrader/Kotlin-Projects/tree/master/WowChat
+
 * ChoreMeApp ( soon will be in appstore after first version is ready)
 * Rick And Morty - Latest Version
 
