@@ -12,7 +12,7 @@ https://github.com/seotrader/Kotlin-Projects/tree/master/WowChat
 
 https://github.com/seotrader/Kotlin-Projects/tree/master/ChoreMeApp
 
-* Rick And Morty - Latest Version
+* Rick And Morty - ( Reading cartoons API with RXJava, Retrofit, working Online and Offline mode with ROOM SQLite)
 
 https://github.com/seotrader/Kotlin-Projects/tree/master/Rick%20And%20Morty%20-%20Latest%20Version
 
