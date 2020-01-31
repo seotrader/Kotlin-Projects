@@ -14,7 +14,8 @@ A useful simple app to add notes for things you want to remeber later
 
 * Android
 * Java
-* Boradcasting
-* Notification Manager
+* Shared-Preferences
+
+
 
  
