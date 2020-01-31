@@ -7,10 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.almitasoft.choremeapp.data.FireBaseManager
-import com.almitasoft.choremeapp.model.CurrentUser
-import com.almitasoft.choremeapp.model.Notification
-import com.almitasoft.choremeapp.model.Result
-import com.almitasoft.choremeapp.model.User
+import com.almitasoft.choremeapp.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.theartofdev.edmodo.cropper.CropImage
 import io.reactivex.disposables.CompositeDisposable
@@ -21,6 +18,7 @@ class SharedViewModel : ViewModel(), KoinComponent {
 
     // holds current user friends list
     var friendsList = MutableLiveData<ArrayList<User>>()
+
     var updatedFilteredText = MutableLiveData<String>()
     private val disposable = CompositeDisposable()
     private val fb : FireBaseManager by inject()
@@ -39,9 +37,8 @@ class SharedViewModel : ViewModel(), KoinComponent {
     }
 
 
-
     fun getBroadCastNotifications() : LiveData<ArrayList<Notification>>{
-        return fb.getBroadCaseNotifications()
+            return fb.getBroadCaseNotifications()
     }
 
     fun deleteBroadCastNotification() : LiveData<Result>{

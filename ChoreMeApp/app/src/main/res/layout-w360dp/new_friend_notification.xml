@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="360dp"
-    android:background="@color/lightGreen"
+    android:background="@color/darkPurple"
     android:layout_height="wrap_content"
     android:padding="@dimen/smallPadding">
 
@@ -22,53 +22,34 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tvUserAdded"
+                android:id="@+id/tvNewFriendAdded"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
                 android:textColor="@android:color/holo_blue_light"
-                android:text="@string/friend_request"
+                android:text="@string/FriendsNow"
                 android:textSize="@dimen/SmallTextSize"
                 android:textStyle="bold"></TextView>
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/IVFriend"
-                android:layout_width="@dimen/SmallImage"
-                android:layout_height="@dimen/SmallImage"
+                android:id="@+id/IVNewFriend"
+                android:layout_width="@dimen/MediumImage"
+                android:layout_height="@dimen/MediumImage"
                 android:layout_marginTop="@dimen/smallPadding"
-                android:layout_below="@id/tvUserAdded"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/tvNewFriendAdded"
                 android:layout_marginStart="@dimen/smallPadding"
                 android:contentDescription="@string/userImage"
                 tools:src="@tools:sample/avatars" />
 
-            <TextView
-                android:id="@+id/tvApproveOrNot"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/btnReject"
-                android:layout_marginLeft="@dimen/smallPadding"
-                android:layout_marginBottom="@dimen/smallPadding"
-                android:layout_toRightOf="@id/IVFriend"
-                android:text="@string/Approve"
-                android:textSize="@dimen/SmallTextSize"
-                android:textStyle="bold"></TextView>
-
             <Button
-                android:id="@+id/btnApprove"
+                android:id="@+id/btnRemoveMessage"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_below="@id/IVFriend"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="@dimen/smallPadding"
-                android:background="@android:drawable/ic_menu_add" />
-
-            <Button
-                android:id="@+id/btnReject"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/IVFriend"
+                android:layout_below="@id/IVNewFriend"
                 android:layout_marginRight="@dimen/smallPadding"
+                android:layout_alignParentRight="true"
                 android:layout_toLeftOf="@id/btnApprove"
                 android:background="@android:drawable/ic_menu_delete" />
 

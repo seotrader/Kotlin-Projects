@@ -16,7 +16,11 @@ import kotlinx.android.synthetic.main.add_task_fragment.*
 import java.text.DateFormat
 import java.util.*
 
-class DatePickerFragment(var addTaskFragment : AddTaskFragment) : DialogFragment(), DatePickerDialog.OnDateSetListener{
+interface PickDate{
+    fun onDatePicked(calendar: Calendar)
+}
+
+class DatePickerFragment(var datePicked : PickDate) : DialogFragment(), DatePickerDialog.OnDateSetListener{
 
     lateinit var mainActivity : MainActivity
 
@@ -47,8 +51,10 @@ class DatePickerFragment(var addTaskFragment : AddTaskFragment) : DialogFragment
         calendar.set(Calendar.MONTH,month)
         calendar.set(Calendar.YEAR,year)
 
-        addTaskFragment.TVCurrentDate.text =
-            "Task Date: ${DateFormat.getDateInstance(DateFormat.FULL).format(calendar.time)}"
+        datePicked.onDatePicked(calendar)
+
+
+
     }
 
 }

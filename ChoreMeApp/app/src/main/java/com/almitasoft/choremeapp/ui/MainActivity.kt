@@ -72,6 +72,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
+
         navController = findNavController(R.id.nav_host_fragment)
 
         appBarConfiguration = AppBarConfiguration(
@@ -88,6 +89,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        fab.show()
         fab.setOnClickListener { view ->
             navController.navigate(R.id.addTask)
 
@@ -101,9 +103,11 @@ class MainActivity : AppCompatActivity() {
         setNotificationChannel()
 
 
-        observeNotifications()
+        if (viewModel.isUserConnected()){
 
-        setObservers()
+            observeNotifications()
+            setObservers()
+        }
 
         printWindowSize()
     }
@@ -130,6 +134,9 @@ class MainActivity : AppCompatActivity() {
 
                     }
                     NotificationType.ADDTASK -> {
+                    }
+                    NotificationType.GENERALNOTIFICATION ->{
+                        notificationService.Notify(notification.notificationMessage,0)
                     }
                 }
             }

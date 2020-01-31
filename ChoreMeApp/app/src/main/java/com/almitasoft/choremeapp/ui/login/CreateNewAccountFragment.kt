@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 
 import com.almitasoft.choremeapp.R
+import com.almitasoft.choremeapp.ui.MainActivity
 import kotlinx.android.synthetic.main.create_new_account_fragment.*
 
 class CreateNewAccountFragment : Fragment() {
@@ -18,6 +19,8 @@ class CreateNewAccountFragment : Fragment() {
     companion object {
         fun newInstance() = CreateNewAccountFragment()
     }
+
+    lateinit var mainActivity : MainActivity
 
     private lateinit var viewModel: CreateNewAccountViewModel
 
@@ -32,6 +35,8 @@ class CreateNewAccountFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CreateNewAccountViewModel::class.java)
 
+        mainActivity = activity as MainActivity
+
         accountCreateBtn.setOnClickListener {
             var email = accountEmailNameET.text.toString().trim()
             var password = accountPasswordET.text.toString().trim()
@@ -42,6 +47,9 @@ class CreateNewAccountFragment : Fragment() {
             ) {
                 viewModel.createAccount(email, password, displayName).observe(this, Observer {
                     Toast.makeText(activity, "Result = ${it.result}", Toast.LENGTH_LONG).show()
+                    if (it.result == "OK"){
+                        mainActivity.navController.navigate(R.id.navigation_dashboard)
+                    }
                 })
             }
         }

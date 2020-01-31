@@ -1,9 +1,7 @@
 package com.almitasoft.choremeapp.data
 
-import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.almitasoft.choremeapp.model.*
@@ -12,12 +10,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
-import id.zelory.compressor.Compressor
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 class FireBaseManager : FireBaseInterface {
@@ -35,6 +31,139 @@ class FireBaseManager : FireBaseInterface {
 
     var mStorageRef = FirebaseStorage.getInstance().reference
     var userID = FirebaseAuth.getInstance().currentUser
+
+    override fun getGeneralNotifications(): Observable<ArrayList<GeneralNotification>> {
+        return Observable.create(ObservableOnSubscribe<ArrayList<GeneralNotification>> { emitter->
+
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+            mDataBase = FirebaseDatabase.getInstance().reference.child("NotificationsRequests")
+                .child(mCurrentUser!!.uid)
+
+            mDataBase.addValueEventListener(object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {
+                    Log.d("Error getNotifications()","Error = ${p0.message}")
+                    emitter.onError(Throwable(p0.message))
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    var tempNotificationList = arrayListOf<GeneralNotification>()
+
+                    if (p0.hasChildren()==false){
+                        emitter.onNext(tempNotificationList)
+                    }
+                    p0.children.forEach {snapshot->
+                        val sourceUID = snapshot.child("UID").value.toString()
+                        val sourceUname = snapshot.child("Source_UName").value.toString()
+                        val targetUID = snapshot.child("Target_UID").value.toString()
+                        val targetUName = snapshot.child("Target_UName").value.toString()
+                        val message = snapshot.child("Message").value.toString()
+                        val sourceThumbImage = snapshot.child("SourceThumbImage").value.toString()
+                        val destinationThumbImage = snapshot.child("DestinationThumbImage").value.toString()
+                        val notificationID = p0.key
+
+
+                            val newFriendNotification = GeneralNotification(message,notificationID!!,
+                                NotificationType.NEWFRIENDNOTIFICATION)
+
+                            newFriendNotification.sourceUID = sourceUID
+                            newFriendNotification.sourceUName = sourceUname
+                            newFriendNotification.targetUID = targetUID
+                            newFriendNotification.targetUName = targetUName
+                            newFriendNotification.notificationThumbImgSource = sourceThumbImage
+                            newFriendNotification.notificationThumbImgDestination = destinationThumbImage
+
+                            tempNotificationList.add(newFriendNotification)
+
+                    }
+                    emitter.onNext(tempNotificationList)
+                }
+            })
+        })
+
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun addGeneralPushNotification(notification: GeneralNotification): Observable<Result> {
+        return Observable.create(ObservableOnSubscribe<Result>{emitter->
+            var result = GetUserDataResult("OK")
+
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+            // permanent notification request, must be deleted by the user
+            mDataBase = FirebaseDatabase.getInstance().reference.child("Notifications")
+                .child(notification.sourceUID).child(notification.targetUID)
+
+            val userObj = hashMapOf<String,String>()
+
+            userObj.put("NotificationType", notification.notificationType.toString())
+            userObj.put("UID", notification.sourceUID)
+            userObj.put("Source_UName", notification.sourceUName)
+            userObj.put("Target_UID", notification.targetUID)
+            userObj.put("Target_UName",notification.targetUName)
+            userObj.put("Message",notification.notificationMessage)
+            userObj.put("SourceThumbImage",notification.notificationThumbImgSource)
+            userObj.put("DestinationThumbImage",notification.notificationThumbImgDestination)
+
+            val addUserResult = AddFriendResult("OK")
+
+            mDataBase.setValue(userObj).addOnCompleteListener {task->
+                if (task.isSuccessful) {
+                    addUserResult.result = "OK"
+                    emitter.onNext(addUserResult)
+                    emitter.onComplete()
+
+                }
+                else{
+                    addUserResult.result = "ERROR = ${task.result.toString()}"
+                    emitter.onError(Throwable(addUserResult.result))
+                    emitter.onComplete()
+                }
+            }
+        } ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun addGeneralNotification(notification: GeneralNotification): Observable<Result> {
+        return Observable.create(ObservableOnSubscribe<Result>{emitter->
+            var result = GetUserDataResult("OK")
+
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+            // permanent notification request, must be deleted by the user
+            mDataBase = FirebaseDatabase.getInstance().reference.child("NotificationsRequests")
+                .child(notification.sourceUID).child(notification.targetUID)
+
+            val userObj = hashMapOf<String,String>()
+
+            userObj.put("NotificationType", notification.notificationType.toString())
+            userObj.put("UID", notification.sourceUID)
+            userObj.put("Source_UName", notification.sourceUName)
+            userObj.put("Target_UID", notification.targetUID)
+            userObj.put("Target_UName",notification.targetUName)
+            userObj.put("Message",notification.notificationMessage)
+            userObj.put("SourceThumbImage",notification.notificationThumbImgSource)
+            userObj.put("DestinationThumbImage",notification.notificationThumbImgDestination)
+
+            val addUserResult = AddFriendResult("OK")
+
+            mDataBase.setValue(userObj).addOnCompleteListener {task->
+                if (task.isSuccessful) {
+                    addUserResult.result = "OK"
+                    emitter.onNext(addUserResult)
+                    emitter.onComplete()
+
+                }
+                else{
+                    addUserResult.result = "ERROR = ${task.result.toString()}"
+                    emitter.onError(Throwable(addUserResult.result))
+                    emitter.onComplete()
+                }
+            }
+        } ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
 
     override fun getTargetUserData2(userID: String): Observable<User> {
         var targetUser : User?=null
@@ -68,9 +197,123 @@ class FireBaseManager : FireBaseInterface {
                 }
             })
 
-        })
+        }).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
+    override fun deleteFriend(user : User) : Observable<Result>{
+        return Observable.create(ObservableOnSubscribe<Result>{emitter->
+            var result = GetUserDataResult("OK")
 
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+            mDataBase = FirebaseDatabase.getInstance().reference.child("Friends")
+                .child(mCurrentUser!!.uid).child(user.userID)
+
+            mDataBase.removeValue().addOnCompleteListener {task->
+                if (task.isSuccessful){
+                    emitter.onNext(result)
+                }
+                else{
+                    Log.d("Error getNotifications()","Error = ${task.result.toString()}")
+                    emitter.onError(Throwable(task.result.toString()))
+                }
+            }
+        }
+        ) .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+
+    }
+    override fun getNotifications2() : Observable<ArrayList<AddFriendNotification>>{
+
+        return Observable.create(ObservableOnSubscribe<ArrayList<AddFriendNotification>> { emitter->
+
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+            mDataBase = FirebaseDatabase.getInstance().reference.child("FriendsRequests")
+                .child(mCurrentUser!!.uid)
+
+
+
+            mDataBase.addValueEventListener(object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {
+                    Log.d("Error getNotifications()","Error = ${p0.message}")
+                    emitter.onError(Throwable(p0.message))
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    var tempNotificationList = arrayListOf<AddFriendNotification>()
+
+                    if (p0.hasChildren()==false)
+                    {
+                        emitter.onNext(tempNotificationList)
+                    }
+
+                    p0.children.forEach {snapshot->
+                        val sourceUID = snapshot.child("Source_UID").value.toString()
+                        val sourceUname = snapshot.child("Source_UName").value.toString()
+                        val targetUID = snapshot.child("Target_UID").value.toString()
+                        val targetUName = snapshot.child("Target_UName").value.toString()
+                        val status = snapshot.child("status").value.toString()
+                        val sourchThumbImage = snapshot.child("SourceThumbImage").value.toString()
+                        val destThumImage = snapshot.child("DestThumbImage").value.toString()
+
+                        if (targetUID == CurrentUser.userID){
+                            var newFriendNotification = AddFriendNotification("New Friend Request From: ${sourceUname}","EMPTY")
+                            newFriendNotification.sourceUID = sourceUID
+                            newFriendNotification.sourceUName = sourceUname
+                            newFriendNotification.status = status
+                            newFriendNotification.targetUID = targetUID
+                            newFriendNotification.targetUName = targetUName
+                            newFriendNotification.notificationThumbImgSource = sourchThumbImage
+                            newFriendNotification.notificationThumbImgDestination = destThumImage
+
+                            tempNotificationList.add(newFriendNotification)
+                        }
+                    }
+                    emitter.onNext(tempNotificationList)
+                }
+            })
+        })
+
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+    override fun getFriendsList(): Observable<ArrayList<User>> {
+        return Observable.create(ObservableOnSubscribe<ArrayList<User>> { emitter->
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+            mDataBase = FirebaseDatabase.getInstance().reference.child("Friends")
+                .child(mCurrentUser!!.uid)
+
+            mDataBase.addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {
+                    Log.d("Error getNotifications()","Error = ${p0.message}")
+                    emitter.onError(Throwable(p0.message))
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    var tempUserList = arrayListOf<User>()
+
+                    p0.children.forEach { snapshot ->
+                        var displayName = snapshot.child("displayname").value.toString()
+                        var imageUrl = snapshot.child("imageUrl").value.toString()
+                        var status = snapshot.child("status").value.toString()
+                        var thumbimageurl = snapshot.child("thumbimageurl").value.toString()
+                        var userID = snapshot.child("userid").value.toString()
+
+                        var user = User(displayName, userID)
+                        user.status = status
+                        user.thumb_image_url = thumbimageurl
+                        user.image_url = imageUrl
+                        tempUserList.add(user)
+                    }
+                    emitter.onNext(tempUserList)
+                    emitter.onComplete()
+                }})
+        }).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+
+    }
     override fun uploadUserImage(uri : Uri, byteArray: ByteArray) : Observable<Result>{
 
         var thumbFile = File(uri.path.toString())
@@ -135,8 +378,34 @@ class FireBaseManager : FireBaseInterface {
                         }
                     }
             }
-        })
+        }).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
+
+    override fun deleteGeneralNotification(notification: GeneralNotification): Observable<Result> {
+        return Observable.create(ObservableOnSubscribe<Result>{emitter->
+            var result = GetUserDataResult("OK")
+
+            mCurrentUser =  FirebaseAuth.getInstance().currentUser
+
+                mDataBase = FirebaseDatabase.getInstance().reference.child("NotificationsRequests")
+                .child(notification.sourceUID).child(notification.targetUID)
+
+            mDataBase.removeValue().addOnCompleteListener {task->
+                if (task.isSuccessful){
+                    emitter.onNext(result)
+                    emitter.onComplete()
+                }
+                else{
+                    Log.d("Error","deleteGeneralNotification error = ${task.result.toString()}")
+                    emitter.onError(Throwable(task.result.toString()))
+                }
+            }
+        }
+        ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     override fun deleteFriendNotification(notification: AddFriendNotification): Observable<Result> {
         return Observable.create(ObservableOnSubscribe<Result>{emitter->
             var result = GetUserDataResult("OK")
@@ -144,11 +413,12 @@ class FireBaseManager : FireBaseInterface {
             mCurrentUser =  FirebaseAuth.getInstance().currentUser
 
             mDataBase = FirebaseDatabase.getInstance().reference.child("FriendsRequests")
-                .child(mCurrentUser!!.uid).child(notification.sourceUID)
+                .child(notification.targetUID).child(notification.sourceUID)
 
             mDataBase.removeValue().addOnCompleteListener {task->
                 if (task.isSuccessful){
                     emitter.onNext(result)
+                    emitter.onComplete()
                 }
                 else{
                     Log.d("Error deleteFriendNotification()","Error = ${task.result.toString()}")
@@ -156,9 +426,17 @@ class FireBaseManager : FireBaseInterface {
                 }
             }
         }
-        )
+        ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
-
+    override fun deleteFriendRequest(notification: AddFriendNotification) : Observable<Result>{
+        // TODO: implement it
+        return Observable.create(ObservableOnSubscribe<Result>{
+            var result = AddFriendResult("OK")
+            it.onNext(result)
+        }).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
     override fun deleteNotification(notification: Notification): Observable<Result> {
         return Observable.create(ObservableOnSubscribe<Result>{emitter->
             var result = GetUserDataResult("OK")
@@ -178,7 +456,8 @@ class FireBaseManager : FireBaseInterface {
                 }
             }
         }
-        )
+        ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
 
     }
 
@@ -267,14 +546,6 @@ class FireBaseManager : FireBaseInterface {
 
     }
 
-    override fun deleteFriendRequest(notification: AddFriendNotification) : Observable<Result>{
-        // TODO: implement it
-        return Observable.create(ObservableOnSubscribe<Result>{
-            var result = AddFriendResult("OK")
-            it.onNext(result)
-        })
-    }
-
     override fun deleteBroadCastotifications() : LiveData<Result>{
 
         var result = GetUserDataResult("OK")
@@ -328,9 +599,23 @@ class FireBaseManager : FireBaseInterface {
                             addFriendNotification.status = status
 
                             tempList.add(addFriendNotification)
-
                         }
-
+                        "NEWFRIENDNOTIFICATION"->{
+                            var addFriendNotification = AddFriendNotification(message,"EMPTY")
+                            addFriendNotification.sourceUName = source_UName
+                            addFriendNotification.targetUName = target_UName
+                            addFriendNotification.targetUID = target_UID
+                            addFriendNotification.sourceUID = uID
+                            tempList.add(addFriendNotification)
+                        }
+                        "GENERALNOTIFICATION"->{
+                            var addFriendNotification = GeneralNotification(message,"EMPTY",NotificationType.GENERALNOTIFICATION)
+                            addFriendNotification.sourceUName = source_UName
+                            addFriendNotification.targetUName = target_UName
+                            addFriendNotification.targetUID = target_UID
+                            addFriendNotification.sourceUID = uID
+                            tempList.add(addFriendNotification)
+                        }
                     }
 
                 }
@@ -359,6 +644,8 @@ class FireBaseManager : FireBaseInterface {
         userObj.put("Target_UName",notification.targetUName)
         userObj.put("Message",notification.notificationMessage)
         userObj.put("Status",notification.status)
+        userObj.put("SourceThumbImage",notification.notificationThumbImgSource)
+        userObj.put("DestinationThumbImage",notification.notificationThumbImgDestination)
 
         var addUserResult = AddFriendResult("OK")
 
@@ -422,6 +709,8 @@ class FireBaseManager : FireBaseInterface {
         userObj.put("Target_UID", user.userID)
         userObj.put("Target_UName", user.displayName)
         userObj.put("status",status)
+        userObj.put("SourceThumbImage", CurrentUser.thumb_image_url!!)
+        userObj.put("DestThumbImage", user.thumb_image_url!!)
 
         var addUserResult = AddFriendResult("OK")
 
@@ -489,110 +778,6 @@ class FireBaseManager : FireBaseInterface {
         return notificationsList
     }
 
-    override fun deleteFriend(user : User) : Observable<Result>{
-        return Observable.create(ObservableOnSubscribe<Result>{emitter->
-            var result = GetUserDataResult("OK")
 
-            mCurrentUser =  FirebaseAuth.getInstance().currentUser
-
-            mDataBase = FirebaseDatabase.getInstance().reference.child("Friends")
-                .child(mCurrentUser!!.uid).child(user.userID)
-
-            mDataBase.removeValue().addOnCompleteListener {task->
-                if (task.isSuccessful){
-                    emitter.onNext(result)
-                }
-                else{
-                    Log.d("Error getNotifications()","Error = ${task.result.toString()}")
-                    emitter.onError(Throwable(task.result.toString()))
-                }
-            }
-        }
-        )
-
-    }
-
-    override fun getNotifications2() : Observable<ArrayList<AddFriendNotification>>{
-
-        return Observable.create(ObservableOnSubscribe<ArrayList<AddFriendNotification>> { emitter->
-
-            mCurrentUser =  FirebaseAuth.getInstance().currentUser
-
-            mDataBase = FirebaseDatabase.getInstance().reference.child("FriendsRequests")
-                .child(mCurrentUser!!.uid)
-
-            mDataBase.addValueEventListener(object : ValueEventListener{
-                override fun onCancelled(p0: DatabaseError) {
-                    Log.d("Error getNotifications()","Error = ${p0.message}")
-                    emitter.onError(Throwable(p0.message))
-                }
-
-                override fun onDataChange(p0: DataSnapshot) {
-                    var tempNotificationList = arrayListOf<AddFriendNotification>()
-
-                    p0.children.forEach {snapshot->
-                        val sourceUID = snapshot.child("Source_UID").value.toString()
-                        val sourceUname = snapshot.child("Source_UName").value.toString()
-                        val targetUID = snapshot.child("Target_UID").value.toString()
-                        val targetUName = snapshot.child("Target_UName").value.toString()
-                        val status = snapshot.child("status").value.toString()
-
-                        if (targetUID == CurrentUser.userID){
-                            var newFriendNotification = AddFriendNotification("New Friend Request From: ${sourceUname}","EMPTY")
-                            newFriendNotification.sourceUID = sourceUID
-                            newFriendNotification.sourceUName = sourceUname
-                            newFriendNotification.status = status
-                            newFriendNotification.targetUID = targetUID
-                            newFriendNotification.targetUName = targetUName
-
-                            tempNotificationList.add(newFriendNotification)
-                        }
-
-                        emitter.onNext(tempNotificationList)
-
-                    }
-                }
-            })
-        })
-
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    override fun getFriendsList(): Observable<ArrayList<User>> {
-        return Observable.create(ObservableOnSubscribe<ArrayList<User>> { emitter->
-            mCurrentUser =  FirebaseAuth.getInstance().currentUser
-
-            mDataBase = FirebaseDatabase.getInstance().reference.child("Friends")
-                .child(mCurrentUser!!.uid)
-
-            mDataBase.addListenerForSingleValueEvent(object : ValueEventListener{
-                override fun onCancelled(p0: DatabaseError) {
-                    Log.d("Error getNotifications()","Error = ${p0.message}")
-                    emitter.onError(Throwable(p0.message))
-                }
-
-                override fun onDataChange(p0: DataSnapshot) {
-                    var tempUserList = arrayListOf<User>()
-
-                    p0.children.forEach { snapshot ->
-                        var displayName = snapshot.child("displayname").value.toString()
-                        var imageUrl = snapshot.child("imageUrl").value.toString()
-                        var status = snapshot.child("status").value.toString()
-                        var thumbimageurl = snapshot.child("thumbimageurl").value.toString()
-                        var userID = snapshot.child("userid").value.toString()
-
-                        var user = User(displayName, userID)
-                        user.status = status
-                        user.thumb_image_url = thumbimageurl
-                        user.image_url = imageUrl
-                        tempUserList.add(user)
-                    }
-                    emitter.onNext(tempUserList)
-                    emitter.onComplete()
-                }})
-        })
-
-    }
 
 }

@@ -18,11 +18,16 @@ import com.almitasoft.choremeapp.model.CurrentUser
 import com.almitasoft.choremeapp.model.User
 import com.almitasoft.choremeapp.ui.MainActivity
 import com.almitasoft.choremeapp.ui.SharedViewModel
+import com.almitasoft.choremeapp.ui.addTask.UserPicked
 import kotlinx.android.synthetic.main.search_users_fragment.*
 import org.koin.android.ext.android.inject
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 
+interface UserSelected{
+    fun onUserSelected(user : User){
+    }
+}
 
 class SearchUsers : Fragment() {
 
@@ -71,7 +76,14 @@ class SearchUsers : Fragment() {
         viewModel = ViewModelProviders.of(this).get(SearchUsersViewModel::class.java)
         sharedViewModel = ViewModelProviders.of(mainActivity).get(SharedViewModel::class.java)
 
-        searchUsersAdapter = SearchUsersAdapter(usersArrayList,this)
+        var userPick = object : UserSelected {
+            override fun onUserSelected(user: User) {
+                addUser(user)
+            }
+        }
+
+        searchUsersAdapter = SearchUsersAdapter(usersArrayList,userPick)
+
 
         RVSearchUsers.apply {
             adapter = searchUsersAdapter
@@ -136,6 +148,8 @@ class SearchUsers : Fragment() {
         notification.status = "WAITING"
         notification.targetUID = user.userID
         notification.targetUName = user.displayName
+        notification.notificationThumbImgSource = CurrentUser.thumb_image_url!!
+        notification.notificationThumbImgDestination = user.thumb_image_url!!
 
         viewModel.addFriendNotification(notification).observe(this, Observer {
             if (it.result == "OK"){

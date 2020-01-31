@@ -1,6 +1,7 @@
 package com.almitasoft.choremeapp.ui.addusers
 
 import android.media.Image
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import com.almitasoft.choremeapp.model.User
 import com.squareup.picasso.Picasso
 
 class SearchUsersAdapter(var usersList:ArrayList<User>,
-                         var searchUserFrgmt : SearchUsers) : RecyclerView.Adapter<SearchUsersAdapter.ViewHolder>(), Filterable {
+                         var userSelectedCallBack : UserSelected) : RecyclerView.Adapter<SearchUsersAdapter.ViewHolder>(), Filterable {
 
     var savedFullUserList = arrayListOf<User>()
 
@@ -44,6 +45,7 @@ class SearchUsersAdapter(var usersList:ArrayList<User>,
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
 
             usersList.clear()
+            @Suppress("UNCHECKED_CAST")
             var result: ArrayList<User> = results!!.values as ArrayList<User>
 
             usersList.addAll(result)
@@ -77,9 +79,8 @@ class SearchUsersAdapter(var usersList:ArrayList<User>,
                 .into(image)
 
             button.setOnClickListener {
-                searchUserFrgmt.addUser(user)
-                Toast.makeText(searchUserFrgmt.context,"Sent friend request to ${user.displayName}",
-                    Toast.LENGTH_SHORT).show()
+                userSelectedCallBack.onUserSelected(user)
+                Log.d("Info","The user ${user.displayName} was selected")
             }
 
             // TODO : set the image as well

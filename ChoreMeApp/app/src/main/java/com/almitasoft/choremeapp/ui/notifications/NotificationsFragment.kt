@@ -11,23 +11,21 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.almitasoft.choremeapp.R
-import com.almitasoft.choremeapp.model.AddFriendNotification
-import com.almitasoft.choremeapp.model.CurrentUser
-import com.almitasoft.choremeapp.model.NotificationType
-import com.almitasoft.choremeapp.model.User
+import com.almitasoft.choremeapp.model.*
 import com.almitasoft.choremeapp.ui.MainActivity
 import com.almitasoft.choremeapp.ui.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_notifications.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.get
 
 class NotificationsFragment : Fragment() {
 
     private lateinit var notificationAdapter: NotificationAdapter
-    lateinit var sharedViewModel: SharedViewModel
+    private val sharedViewModel: SharedViewModel by sharedViewModel()
     val notificationsViewModel : NotificationsViewModel by viewModel()
     private lateinit var mainActivity : MainActivity
     var friendsList = arrayListOf<User>()
+    var activityFriendsList = arrayListOf<User>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,9 +35,7 @@ class NotificationsFragment : Fragment() {
 //        notificationsViewModel =
 //            ViewModelProviders.of(this).get(NotificationsViewModel::class.java)
 
-
         activity?.let{
-            sharedViewModel = ViewModelProviders.of(it).get(SharedViewModel::class.java)
             mainActivity = activity as MainActivity
         }
 
@@ -66,6 +62,7 @@ class NotificationsFragment : Fragment() {
         notificationsViewModel.refreshData()
 
         notificationsViewModel.notificationList.observe(this, Observer {
+            notificationAdapter.notificationList.clear()
             notificationAdapter.notificationList.addAll(it)
             notificationAdapter.notifyDataSetChanged()
         })
@@ -77,11 +74,18 @@ class NotificationsFragment : Fragment() {
                 }
             }
         })
+    }
 
-//        notificationsViewModel.getNotificationsList().observe(this, Observer {
-//            notificationAdapter.notificationList.addAll(it)
-//            notificationAdapter.notifyDataSetChanged()
-//        })
+    fun removeGeneralNotification(notification: GeneralNotification){
+        notificationsViewModel.removeGeneralNotification(notification).observe(this, Observer {
+            if (it.result == "OK"){
+                notificationAdapter.notificationList.remove(notification)
+                notificationAdapter.notifyDataSetChanged()
+                Log.d("Info", "General Notification ${notification.sourceUName} Notification was deleted !")
+            }else{
+                Log.d("Error", "Error = ${it.result}")
+            }
+        })
 
     }
 
@@ -89,18 +93,38 @@ class NotificationsFragment : Fragment() {
 
         notificationsViewModel.deleteFriendNotification(notification).observe(this, Observer {
             if (it.result == "OK"){
-                Toast.makeText(activity!!.applicationContext,
-                    "User ${notification.sourceUName} Notification was deleted !",
-                    Toast.LENGTH_LONG).show()
                 notificationAdapter.notificationList.remove(notification)
                 notificationAdapter.notifyDataSetChanged()
-                Log.d("Delete Notifiation Success", "User ${notification.sourceUName} Notification was deleted !")
+                Log.d("Info", "User ${notification.sourceUName} Notification was deleted !")
             }else{
-                Log.d("NotificationsFragment:deleteFriend", "Error = ${it.result}")
+                Log.d("Error", "Error = ${it.result}")
             }
         })
     }
 
+    fun addPushNotification(notification: GeneralNotification){
+        notificationsViewModel.addPushNotification(notification).observe(this, Observer {
+            if (it.result == "OK"){
+                Log.d("Info","NotificationFragment:addGeneralNotification. , SUCCESS")
+            }
+            else{
+                Log.d("Error","NotificationFragment:addGeneralNotification, Error = ${it.result}")
+            }
+
+        })
+
+    }
+    fun addGeneralNotification(notification: GeneralNotification){
+       notificationsViewModel.addGeneralNotification(notification).observe(this, Observer {
+           if (it.result == "OK"){
+               Log.d("Info","NotificationFragment:addGeneralNotification. , SUCCESS")
+           }
+           else{
+               Log.d("Error","NotificationFragment:addGeneralNotification, Error = ${it.result}")
+           }
+
+       })
+    }
     fun addFriend(notification : AddFriendNotification){
         val user = User(notification.sourceUName, notification.sourceUID)
 

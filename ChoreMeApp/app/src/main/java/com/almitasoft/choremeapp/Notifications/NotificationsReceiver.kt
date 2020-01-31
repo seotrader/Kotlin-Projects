@@ -18,6 +18,7 @@ class NotificationsReceiver : BroadcastReceiver(), KoinComponent{
 
         if (intent!!.action.equals("com.tester.close")){
             Log.d("NotificationsReceiver::onReceive","Close event received in service")
+            notificationService.closeNotification()
             notificationService.removeNotificationChannel()
             notificationService.createNotificationChannel()
         }
@@ -26,6 +27,7 @@ class NotificationsReceiver : BroadcastReceiver(), KoinComponent{
             //start activity
             //start activity
             Log.d("NotificationsReceiver::onReceive","com.tester.open event received in service")
+            notificationService.closeNotification()
             val i = Intent()
             i.setClassName(context!!.packageName, MainActivity::class.java.name)
             i.flags = Intent.FLAG_ACTIVITY_NEW_TASK

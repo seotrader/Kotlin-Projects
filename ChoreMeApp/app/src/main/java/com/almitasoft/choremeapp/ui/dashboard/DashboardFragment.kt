@@ -1,6 +1,7 @@
 package com.almitasoft.choremeapp.ui.dashboard
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +52,7 @@ class DashboardFragment : Fragment() {
                 mainActivity.navController.navigate(R.id.welcome_screen)
             }
 
-            it.fab.visibility = View.VISIBLE
+            it.fab.show()
         }
 
 
@@ -62,7 +63,7 @@ class DashboardFragment : Fragment() {
 
             fbManager.getCurrentUserData().observe(this, Observer {
                 if (it.result == "OK") {
-                    mainActivity.title = "DashBoard: ${CurrentUser.displanyName}"
+                    Log.d("Info","Current User = ${it.toString()}")
                 }else{
                     Toast.makeText(mainActivity, "ERROR WITH DBS", Toast.LENGTH_SHORT).show()
 

@@ -16,12 +16,19 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import com.almitasoft.choremeapp.R
 
+
 class NotificationSender(var context:Context) {
-    val NOTIFIYTAG="New Notification"
+    val NOTIFIYTAG="New ChoreMe Notification"
     val NOTIFICATION_CHANNEL = "notification_channel_02"
 
+    fun closeNotification(){
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+         notificationManager.cancel(NOTIFIYTAG,0)
+    }
     fun removeNotificationChannel()
     {
         val notificationManager: NotificationManager =
@@ -148,12 +155,33 @@ class NotificationSender(var context:Context) {
 
         var mNotification: Notification = builder.build()
 
+
+        val oldVersionBuilder = NotificationCompat.Builder(context)
+            .setDefaults(Notification.DEFAULT_ALL)
+            .setContentTitle("New request")
+            .setContentText(message)
+            .setNumber(number)
+            .addAction(
+                R.drawable.ic_launcher_background,
+                "Close",
+                closePendingIntent )
+            .addAction(
+                R.drawable.ic_launcher_background,
+                "Goto App",
+                openPendingIntent )
+            .setSmallIcon(R.drawable.notification_icon_background)
+            .setAutoCancel(true)
         //mNotification.flags = Notification.FLAG_INSISTENT
+
+//        with(NotificationManagerCompat.from(context)) {
+//            // notificationId is a unique int for each notification that you must define
+//            notify(1, builder.build())
+//        }
 
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.ECLAIR) {
             nm.notify(NOTIFIYTAG, 0,mNotification)
         }else{
-            nm.notify(NOTIFIYTAG.hashCode(), mNotification)
+            nm.notify(NOTIFIYTAG.hashCode(), oldVersionBuilder.build())
         }
 
     }

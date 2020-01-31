@@ -31,5 +31,9 @@
     <string name="selectdate">Pick a Date</string>
     <string name="Currentdate">Current Date:</string>
     <string name="PickUser">Pick Target User</string>
+    <string name="FriendsNow">XXX Is Your Friend Now!</string>
+    <string name="AddToTask">Add To Task!</string>
+    <string name="PickFriend">Pick Target Friend</string>
+    <string name="CurrentUser">Current User Picked</string>
 
 </resources>

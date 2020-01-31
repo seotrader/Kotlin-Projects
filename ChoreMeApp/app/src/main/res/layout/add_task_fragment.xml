@@ -93,5 +93,16 @@
         android:layout_centerHorizontal="true"
         android:text="@string/PickUser" />
 
+    <TextView
+        android:id="@+id/TVUserPicked"
+        android:layout_below="@id/btnTargetUser"
+        android:textSize="@dimen/SmallTextSize"
+        android:paddingLeft="@dimen/smallPadding"
+        android:layout_marginTop="@dimen/smallPadding"
+        android:textColor="@color/darkPurple"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/CurrentUser" />
+
 
 </RelativeLayout>
