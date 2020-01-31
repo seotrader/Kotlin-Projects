@@ -8,7 +8,7 @@ A useful simple app to add notes for things you want to remeber later
 
 ## Screenshots of the app
 
-![](screenshot/Screenshot_1580500817.png)
+![](screenshot/animated.gif)
 
 ## Technology Stack
 
