@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -12,7 +11,9 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,7 +28,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+
         title = "Simple Notes App"
+        notes.clear()
         sharedPreferences = applicationContext.getSharedPreferences("com.almitasoft.notesapp",
             Context.MODE_PRIVATE)
 
@@ -88,6 +92,15 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        setListeners()
+
+    }
+
+    private fun setListeners() {
+        fab.setOnClickListener {
+            val intent = Intent(applicationContext, NoteEditorActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
