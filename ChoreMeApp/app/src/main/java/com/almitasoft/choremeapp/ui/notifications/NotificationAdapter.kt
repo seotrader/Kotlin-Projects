@@ -29,17 +29,17 @@ class NotificationAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == 0){
-            var view = LayoutInflater.from(parent.context).inflate(R.layout.friend_add_notification,
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.friend_add_notification,
                 parent,false)
             return FriendAddedViewHolder(view)
         }
         else if (viewType==1){
-            var view = LayoutInflater.from(parent.context).inflate(R.layout.new_friend_notification,
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.new_friend_notification,
                 parent,false)
             return NewFriendNotificationViewHolder(view)
         }
         else{
-            var view = LayoutInflater.from(parent.context).inflate(R.layout.friend_add_notification,
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.friend_add_notification,
                 parent,false)
             return FriendAddedViewHolder(view)
         }
