@@ -1,4 +1,4 @@
-package com.example.recyclerviewexample.viewmodel
+package com.example.recyclerviewexample.View
 
 import android.graphics.Typeface
 import android.view.LayoutInflater
@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recyclerviewexample.R
 import com.example.recyclerviewexample.model.City
-import org.w3c.dom.Text
 
 class CitiesAdapter(private val cities: List<City>) : RecyclerView.Adapter<CitiesAdapter.ViewHolder>() {
 

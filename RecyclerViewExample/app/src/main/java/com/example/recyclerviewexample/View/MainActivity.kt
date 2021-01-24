@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recyclerviewexample.R
 import com.example.recyclerviewexample.model.City
-import com.example.recyclerviewexample.viewmodel.CitiesAdapter
 import com.example.recyclerviewexample.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
