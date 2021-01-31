@@ -29,29 +29,28 @@ class MainViewModel : ViewModel() {
                 .subscribe(
                         // On success
                         {
-                            Log.d("ViewModel","Read succesfully the cities. cities = $it")
-                            val sortedList = sortAndGroup(it)
-                            cities.value = sortedList
+                            Log.d("ViewModel","Read successfully the cities. cities = $it")
+                            cities.value = sortAndGroup(it)
                         },
                         // On error
                         {
-                            Log.d("Error", "Error = ${it.message}")
+                            Log.e("Error", "Error = ${it.message}")
                         })
     }
 
     private fun sortAndGroup(cities: List<City>): List<City> {
         // Sort and group
-        var sortedHash = cities.sortedBy {
+        val sortedHash = cities.sortedBy {
             it.city
         }.groupBy {
             it.country
         }.toSortedMap()
 
-        var sortedGroupedList = arrayListOf<City>()
-        sortedHash.keys.forEach {
-            sortedGroupedList.add(City(it, ""))
-            sortedHash[it]?.forEach {city->
-                sortedGroupedList.add(City(it, city.city))
+        val sortedGroupedList = arrayListOf<City>()
+        sortedHash.keys.forEach {country->
+            sortedGroupedList.add(City(country, ""))
+            sortedHash[country]?.let {
+                sortedGroupedList.addAll(it.map {city -> City(country, city.city)})
             }
         }
 
